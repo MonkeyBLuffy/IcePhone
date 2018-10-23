@@ -1,92 +1,144 @@
 const db = require('./db')
 
 module.exports = function (app) {
-  app.all("*", function(req, res, next) {
-    // res.writeHead(200, { "Content-Type": "text/plain", "Access-Control-Allow-Origin":"*" })
-    // res.header('Access-Control-Allow-Origin', '*')
-    // res.header('Access-Control-Allow-Headers', 'X-Requested-With')
-    // res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS')
-    // res.header("X-Powered-By",' 3.2.1')
-    // res.header("Content-Type", "application/json;charset=utf-8")
-    // next()
-    // res.header('Access-Control-Allow-Origin', '*');
-    // res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
-    // res.header("Access-Control-Allow-Methods","*");
-
+  app.all("*", function (req, res, next) {
     next();
-    // if (req.method == 'OPTIONS') {
-    //   res.send(200);
-    // }
-    // else {
-    //   next();
-    // }
   });
   // api login
 
   //维修列表==================================================
   //获取维修列表
-  app.get('/repaire/app/getRepairedList', function(req, res){
-    db.repaireModel.find({}, function(err, doc){
-      if (err) {
-        console.log('查询出错：' + err);
-        res.json({code: 700, msg:'查询出错：' + err})
-        return
-      } else {
-        if (!doc) {
-          res.json({code: 600, msg:'没有维修记录', data: doc})
-          return
-        } else {
-          res.json({code: 200, msg:'查询成功', data: doc})
-          return
-        }
+  app.get('/repaire/app/getRepairedList', function (req, res) {
+    
+    let repaireBean = [];
 
-      }
+    const param = {};
+    const time = {};
+    if(req.query.centerName!='') param.center_name = req.query.centerName;
+    if(req.query.startTime!='') {
+      time.$gte = req.query.startTime;
+      param.time = time;
+    }
+    if(req.query.endTime!='') {
+      time.$lte = req.query.endTime;
+      param.time = time;
+    }
+
+
+    console.log(param)
+    
+    // repaire
+    const getRepaireBean = new Promise((resolve, reject) => {
+      db.repaire_test.find(
+        param,
+        function (err, doc) {
+          if (err) {
+            console.log('repaireBean find error!')
+            reject('reject repaireBean')
+          } else {
+            if (!doc) {
+              repaireBean = [];
+            } else {
+              repaireBean = doc;
+            }
+            resolve(repaireBean)
+          }
+        })
     })
-    
-  })
-  //删除维修记录
-  app.get('/repaire/app/deleteRepaireRecore', function(req, res){
 
-    
+    const p_all = Promise.all([getRepaireBean])
+
+    p_all.then((suc) => {
+      let data = {
+        "RepaireBean": suc[0]
+      }
+      res.json({ code: 200, msg: '查询成功', data: data })
+      return
+    }).catch((err) => {
+      console.log('err all:' + err)
+      res.json({ code: 600, msg: '查询出错', data: data })
+      return
+    })
+  })
+
+  //删除维修记录
+  app.get('/repaire/app/deleteRepaireRecore', function (req, res) {
+
+
   })
 
   //修改维修记录
-  app.post('/repaire/app/changeRepaireRecord', function(req, res){
+  app.post('/repaire/app/changeRepaireRecord', function (req, res) {
 
-    
+      
   })
-  
-  //增加维修记录
-  app.post('/repaire/app/addRepaireRecord', function(req, res){
 
-    
+  //增加维修记录
+  app.post('/repaire/app/addRepaireRecord', function (req, res) {
+
+
   })
 
   //联社中心==========================================
   //获取联社中心列表
-  app.get('/repaire/app/getCenterList', function(req, res){
+  app.get('/repaire/app/getCenterList', function (req, res) {
+    let centerBean = [];
 
-    
+    // center
+    const getCenter = new Promise((resolve, reject) => {
+      db.center_test.find(
+        {},
+        function (err, doc) {
+          if (err) {
+            console.log('center find error!');
+            reject('reject center')
+          } else {
+            if (!doc) {
+              centerBean = [];
+            } else {
+              centerBean = doc;
+            }
+            resolve(centerBean)
+          }
+        })
+    })
+
+    const p_all = Promise.all([getCenter])
+
+    p_all.then((suc) => {
+      let data = {
+        "CenterBean": suc[0]
+      }
+      res.json({ code: 200, msg: '查询成功', data: data })
+      return
+    }).catch((err) => {
+      console.log('err all:' + err)
+      res.json({ code: 600, msg: '查询出错', data: data })
+      return
+    })
+
   })
   //删除维修记录
-  app.get('/repaire/app/deleteCenterRecore', function(req, res){
+  app.get('/repaire/app/deleteCenterRecore', function (req, res) {
 
-  
+
   })
 
   //修改维修记录
-  app.post('/repaire/app/changeCenterRecord', function(req, res){
+  app.post('/repaire/app/changeCenterRecord', function (req, res) {
 
-  
+
   })
 
   //增加维修记录
-  app.post('/repaire/app/addCenterRecord', function(req, res){
+  app.post('/repaire/app/addCenterRecord', function (req, res) {
 
-  
+
   })
 
-  app.get('*', function(req, res){
+
+
+  app.get('*', function (req, res) {
     res.end('404')
   })
 
