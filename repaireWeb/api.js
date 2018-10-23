@@ -1,6 +1,11 @@
 const db = require('./db')
+const bodyParser = require('body-parser');
+const url = require("url");//解析url为对象
+const querystring = require('querystring');//解析如‘a=1&b=2’为对象
 
 module.exports = function (app) {
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({extended: false}));
   app.all("*", function (req, res, next) {
     next();
   });
@@ -23,14 +28,12 @@ module.exports = function (app) {
       time.$lte = req.query.endTime;
       param.time = time;
     }
-
-
-    console.log(param)
     
     // repaire
     const getRepaireBean = new Promise((resolve, reject) => {
       db.repaire_test.find(
         param,
+        {__v:0},
         function (err, doc) {
           if (err) {
             console.log('repaireBean find error!')
@@ -64,18 +67,40 @@ module.exports = function (app) {
   //删除维修记录
   app.get('/repaire/app/deleteRepaireRecore', function (req, res) {
 
-
   })
 
   //修改维修记录
   app.post('/repaire/app/changeRepaireRecord', function (req, res) {
-
-      
+    db.repaire_test.findByIdAndUpdate(
+      req.body._id,
+      req.body,
+      {upsert:true},
+      function(err,doc){
+        if (err) {
+          console.log('修改错误：' + err);
+          res.json({code: 700, msg:'查询出错：' + err})
+          return
+        } else{
+          res.json({code: 200, msg:'修改成功'})
+        }
+      }
+    )
   })
 
   //增加维修记录
   app.post('/repaire/app/addRepaireRecord', function (req, res) {
-
+    db.repaire_test.create(
+      req.body,
+      function(err,doc){
+        if(err){
+          console.log('添加失败' + err);
+          res.json({code: 700, msg:'添加失败'})
+        } else{
+          console.log(doc);
+          res.json({code: 200, msg:'添加成功'})
+        }
+      }
+    )
 
   })
 
