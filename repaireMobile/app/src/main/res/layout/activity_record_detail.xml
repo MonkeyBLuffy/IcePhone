@@ -246,11 +246,10 @@
                 android:background="@drawable/bg_green_full"
                 android:text="提交"
                 android:textColor="@color/white"
-                android:textSize="@dimen/y30" />
+                android:textSize="@dimen/y35" />
 
         </LinearLayout>
 
     </ScrollView>
-
 
 </LinearLayout>
