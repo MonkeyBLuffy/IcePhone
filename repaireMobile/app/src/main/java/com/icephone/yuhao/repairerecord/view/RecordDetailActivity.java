@@ -1,6 +1,7 @@
 package com.icephone.yuhao.repairerecord.view;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -66,7 +67,23 @@ public class RecordDetailActivity extends BaseActivity {
 
     @OnClick(R.id.rl_center_name)
     void chooseCenterName() {
-        ToastUtil.showToastShort(this,"展示右边栏，选择联社");
+        final String[] item = {"清苑联社", "满城联社"};
+        DialogUtil.showSingalChooseDialog(this, "选择联社", item,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        centerNameView.setText(item[which]);
+                    }
+                }
+
+        );
     }
 
     @OnClick(R.id.iv_delete)

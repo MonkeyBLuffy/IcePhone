@@ -9,19 +9,20 @@ import android.view.View;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class DialogUtil {
+
 
     public static void showAlertDialog(Context context,
                                        @LayoutRes int resId,
                                        String title,
-                                       String positiveMsg,
                                        DialogInterface.OnClickListener positiveListener,
-                                       String negativeMsg,
-                                       DialogInterface.OnClickListener negativeListener){
+                                       DialogInterface.OnClickListener negativeListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setPositiveButton(positiveMsg, positiveListener);
-        builder.setNegativeButton(negativeMsg, negativeListener);
+
+        builder.setPositiveButton("确定", positiveListener);
+        builder.setNegativeButton("取消", negativeListener);
         AlertDialog dialog = builder.create();
         View view = View.inflate(context, resId, null);
         dialog.setTitle(title);
@@ -29,7 +30,21 @@ public class DialogUtil {
         dialog.show();
     }
 
-    public static void showDateDialog(Context context,Calendar calendar,DatePickerDialog.OnDateSetListener listener) {
+    public static void showSingalChooseDialog(Context context,
+                                              String title,
+                                              String[] item,
+                                              DialogInterface.OnClickListener positiveListener,
+                                              DialogInterface.OnClickListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setSingleChoiceItems(item,-1,listener);
+        builder.setPositiveButton("确定", positiveListener);
+        AlertDialog dialog = builder.create();
+        dialog.setTitle(title);
+        dialog.show();
+
+    }
+
+    public static void showDateDialog(Context context, Calendar calendar, DatePickerDialog.OnDateSetListener listener) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(context, listener,
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),

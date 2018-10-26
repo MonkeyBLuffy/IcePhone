@@ -2,6 +2,7 @@ package com.icephone.yuhao.repairerecord.view;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.DatePicker;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import com.icephone.yuhao.repairerecord.R;
 import com.icephone.yuhao.repairerecord.Util.DialogUtil;
 import com.icephone.yuhao.repairerecord.Util.TimeUtil;
+import com.icephone.yuhao.repairerecord.Util.ToastUtil;
 
 import java.util.Calendar;
 
@@ -28,16 +30,32 @@ public class SearchRecordActivity extends BaseActivity {
 
     @OnClick(R.id.rl_center_name)
     void chooseCenterName() {
+        final String[] item = {"清苑联社", "满城联社"};
+        DialogUtil.showSingalChooseDialog(this, "选择联社", item,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                },
+                new DialogInterface.OnClickListener() {
 
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        tvCenterName.setText(item[which]);
+                    }
+                }
+
+        );
     }
 
     @OnClick(R.id.rl_start_time)
     void chooseStartTime() {
-        DialogUtil.showDateDialog(this, calendar,new DatePickerDialog.OnDateSetListener() {
+        DialogUtil.showDateDialog(this, calendar, new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(year,month,dayOfMonth);
+                calendar.set(year, month, dayOfMonth);
                 tvStartTime.setText(TimeUtil.getShowTime(calendar));
                 startTime = TimeUtil.getUploadTime(calendar);
             }
@@ -46,11 +64,11 @@ public class SearchRecordActivity extends BaseActivity {
 
     @OnClick(R.id.rl_end_time)
     void chooseEndTime() {
-        DialogUtil.showDateDialog(this, calendar,new DatePickerDialog.OnDateSetListener() {
+        DialogUtil.showDateDialog(this, calendar, new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(year,month,dayOfMonth);
+                calendar.set(year, month, dayOfMonth);
                 tvEndTime.setText(TimeUtil.getShowTime(calendar));
                 endTime = TimeUtil.getUploadTime(calendar);
             }
