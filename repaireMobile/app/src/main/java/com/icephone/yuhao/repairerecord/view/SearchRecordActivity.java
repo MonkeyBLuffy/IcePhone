@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.icephone.yuhao.repairerecord.R;
 import com.icephone.yuhao.repairerecord.Util.DialogUtil;
+import com.icephone.yuhao.repairerecord.Util.StringConstant;
 import com.icephone.yuhao.repairerecord.Util.TimeUtil;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
 
@@ -31,7 +32,7 @@ public class SearchRecordActivity extends BaseActivity {
     @OnClick(R.id.rl_center_name)
     void chooseCenterName() {
         final String[] item = {"清苑联社", "满城联社"};
-        DialogUtil.showSingalChooseDialog(this, "选择联社", item,
+        DialogUtil.showSingleChooseDialog(this, "选择联社", item,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -43,6 +44,7 @@ public class SearchRecordActivity extends BaseActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         tvCenterName.setText(item[which]);
+                        centerName = item[which];
                     }
                 }
 
@@ -77,7 +79,11 @@ public class SearchRecordActivity extends BaseActivity {
 
     @OnClick(R.id.bt_search)
     void searchRecord() {
-
+        Bundle bundle = new Bundle();
+        bundle.putString(StringConstant.KEY_SEARCH_CENTER_NAME,centerName);
+        bundle.putString(StringConstant.KEY_SEARCH_START_TIME, startTime);
+        bundle.putString(StringConstant.KEY_SEARCH_END_TIME, endTime);
+        openActivity(ResultActivity.class, bundle);
     }
 
     @OnClick(R.id.rl_back)

@@ -5,8 +5,12 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.LayoutRes;
+import android.support.v4.app.NavUtils;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.EditText;
+
+import com.icephone.yuhao.repairerecord.R;
 
 import java.util.Calendar;
 import java.util.List;
@@ -30,7 +34,37 @@ public class DialogUtil {
         dialog.show();
     }
 
-    public static void showSingalChooseDialog(Context context,
+    public static void showAlertDialog(Context context,
+                                       String title,
+                                       DialogInterface.OnClickListener positiveListener,
+                                       DialogInterface.OnClickListener negativeListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setPositiveButton("确定", positiveListener);
+        builder.setNegativeButton("取消", negativeListener);
+        AlertDialog dialog = builder.create();
+        dialog.setTitle(title);
+        dialog.show();
+    }
+
+    public static void showEditTextDialog(Context context,
+                                       String title,
+                                       DialogInterface.OnClickListener positiveListener,
+                                       DialogInterface.OnClickListener negativeListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View view = View.inflate(context, R.layout.layout_dialog_edit, null);
+        EditText editText = view.findViewById(R.id.et_add_center);
+        builder.setPositiveButton("确定", positiveListener);
+        builder.setNegativeButton("取消", negativeListener);
+        AlertDialog dialog = builder.create();
+        dialog.setTitle(title);
+        dialog.setView(view);
+        dialog.show();
+    }
+
+
+
+    public static void showSingleChooseDialog(Context context,
                                               String title,
                                               String[] item,
                                               DialogInterface.OnClickListener positiveListener,

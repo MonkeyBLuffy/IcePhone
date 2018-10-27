@@ -13,12 +13,12 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract void initDate();
 
-    public void toOtherActivity(Class<? extends Activity> cls) {
+    public void openActivity(Class<? extends Activity> cls) {
         Intent intent = new Intent(this, cls);
         startActivity(intent);
     }
 
-    public void toOtherActivity(Class<? extends Activity> cls,Bundle bundle){
+    public void openActivity(Class<? extends Activity> cls,Bundle bundle){
         Intent intent = new Intent(this, cls);
         intent.putExtras(bundle);
         startActivity(intent);

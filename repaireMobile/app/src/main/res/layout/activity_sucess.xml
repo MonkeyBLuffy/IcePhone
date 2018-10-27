@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/pageBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pageBackground"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".view.CenterListActivity">
+    tools:context=".view.SuccessActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/white">
 
-        <FrameLayout
+        <RelativeLayout
             android:id="@+id/rl_back"
             android:layout_width="40dp"
             android:layout_height="match_parent">
@@ -21,45 +21,42 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_gravity="center"
+                android:layout_centerInParent="true"
                 android:src="@drawable/ic_return" />
 
-        </FrameLayout>
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="@string/centerManage"
+            android:text="记录提交"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp" />
 
-        <FrameLayout
-            android:id="@+id/fl_add_center"
-            android:layout_width="@dimen/x100"
-            android:layout_alignParentRight="true"
-            android:layout_height="match_parent">
-
-            <ImageView
-                android:layout_gravity="center"
-                android:src="@drawable/ic_add"
-                android:layout_width="@dimen/x50"
-                android:layout_height="@dimen/y40"
-                 />
-
-        </FrameLayout>
-
-
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_center_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/y14">
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="66dp"
+        android:src="@drawable/ic_success" />
 
-    </android.support.v7.widget.RecyclerView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="维修记录已提交"
+        android:textColor="@color/colorPrimary"
+        android:textSize="15sp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="请稍后查看"
+        android:textColor="@color/gray_999"
+        android:textSize="13sp" />
 
 </LinearLayout>

@@ -1,14 +1,21 @@
 package com.icephone.yuhao.repairerecord.view;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.annotation.LayoutRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.icephone.yuhao.repairerecord.R;
+import com.icephone.yuhao.repairerecord.Util.DialogUtil;
+import com.icephone.yuhao.repairerecord.Util.StringConstant;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
 import com.icephone.yuhao.repairerecord.adapter.CenterAdapter;
 import com.icephone.yuhao.repairerecord.bean.CenterBean;
@@ -21,6 +28,31 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class CenterListActivity extends BaseActivity {
+
+    @OnClick(R.id.fl_add_center)
+    void addCenter() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = View.inflate(this, R.layout.layout_dialog_edit, null);
+        final EditText editText = view.findViewById(R.id.et_add_center);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String newCenterName = editText.getText() == null ? "" : editText.getText().toString();
+                if (newCenterName.equals("")) {
+                    ToastUtil.showToastShort(CenterListActivity.this, "请输入名称");
+                } else {
+                    // TODO 调用网络接口上传
+                    ToastUtil.showToastShort(CenterListActivity.this, "添加成功");
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.setNegativeButton("取消", null);
+        AlertDialog dialog = builder.create();
+        dialog.setTitle("添加联社");
+        dialog.setView(view);
+        dialog.show();
+    }
 
     @OnClick(R.id.rl_back)
     void back() {
@@ -51,7 +83,24 @@ public class CenterListActivity extends BaseActivity {
         centerAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                ToastUtil.showToastShort(getApplicationContext(),centerBeanList.get(position).getCenterName());
+                Bundle bundle = new Bundle();
+                bundle.putString(StringConstant.KEY_SEARCH_CENTER_NAME,centerBeanList.get(position).getCenterName());
+                bundle.putString(StringConstant.KEY_SEARCH_START_TIME, "");
+                bundle.putString(StringConstant.KEY_SEARCH_END_TIME, "");
+                openActivity(ResultActivity.class, bundle);
+            }
+        });
+
+        centerAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+                DialogUtil.showAlertDialog(CenterListActivity.this, "确定删除吗", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //TODO 删除操作。
+                    }
+                }, null);
+                return true;
             }
         });
         rvCenterList.setAdapter(centerAdapter);
@@ -65,4 +114,5 @@ public class CenterListActivity extends BaseActivity {
 
         centerAdapter = new CenterAdapter(R.layout.layout_center_item,centerBeanList);
     }
+
 }

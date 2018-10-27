@@ -11,5 +11,9 @@ public class StringConstant {
 
     public final static String KEY_TRANSFER_RECORD = "record";
 
+    public final static String KEY_SEARCH_CENTER_NAME = "centerName";
+    public final static String KEY_SEARCH_START_TIME = "startTime";
+    public final static String KEY_SEARCH_END_TIME = "endTime";
+
 
 }

@@ -98,6 +98,7 @@
             android:layout_marginTop="@dimen/y20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/y20"
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView
@@ -136,6 +137,7 @@
                             android:layout_marginLeft="@dimen/x20"
                             android:layout_marginStart="@dimen/x20"
                             android:text="请选择联社"
+                            android:textSize="@dimen/y28"
                             android:textColor="@color/gray_ccc" />
 
                         <ImageView
@@ -158,6 +160,26 @@
 
                     <EditText
                         android:id="@+id/et_site_name"
+                        android:hint="@string/hint_site_name"
+                        android:layout_width="match_parent"
+                        android:textSize="@dimen/y28"
+                        android:layout_height="@dimen/y90"
+                        android:layout_marginTop="@dimen/y20"
+                        android:background="@drawable/bg_gray_line"
+                        android:paddingLeft="@dimen/x20"
+                        android:paddingStart="@dimen/x20" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/y20"
+                        android:text="网点人员："
+                        android:textSize="@dimen/y26" />
+
+                    <EditText
+                        android:id="@+id/et_site_person"
+                        android:textSize="@dimen/y28"
+
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/y90"
                         android:layout_marginTop="@dimen/y20"
@@ -176,6 +198,7 @@
                 android:layout_marginLeft="@dimen/x30"
                 android:layout_marginRight="@dimen/x30"
                 android:layout_marginTop="@dimen/y20"
+                android:layout_marginBottom="@dimen/y10"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="10dp">
 
@@ -189,22 +212,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/y20"
-                        android:text="维修项目："
-                        android:textSize="@dimen/y26" />
-
-                    <EditText
-                        android:id="@+id/et_repair_pro"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/y90"
-                        android:layout_marginTop="@dimen/y20"
-                        android:background="@drawable/bg_gray_line"
-                        android:paddingLeft="@dimen/x20"
-                        android:paddingStart="@dimen/x20" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/y20"
                         android:text="维修人员："
                         android:textSize="@dimen/y26" />
 
@@ -212,6 +219,7 @@
                         android:id="@+id/et_repair_person"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/y90"
+                        android:textSize="@dimen/y28"
                         android:layout_marginTop="@dimen/y20"
                         android:background="@drawable/bg_gray_line"
                         android:paddingLeft="@dimen/x20"
@@ -221,18 +229,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/y20"
-                        android:text="网点人员："
+                        android:text="维修项目："
                         android:textSize="@dimen/y26" />
 
                     <EditText
-                        android:id="@+id/et_site_person"
+                        android:id="@+id/et_repair_pro"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/y90"
+                        android:layout_height="@dimen/y140"
                         android:layout_marginTop="@dimen/y20"
+                        android:textSize="@dimen/y24"
                         android:background="@drawable/bg_gray_line"
+                        android:maxLines="2"
                         android:paddingLeft="@dimen/x20"
-                        android:paddingStart="@dimen/x20" />
-
+                        android:paddingRight="@dimen/x20" />
 
                 </LinearLayout>
 
@@ -242,7 +251,10 @@
                 android:id="@+id/bt_submit"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/y100"
-                android:layout_margin="@dimen/x30"
+                android:layout_marginTop="@dimen/y10"
+                android:layout_marginBottom="@dimen/y40"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_marginRight="@dimen/x30"
                 android:background="@drawable/bg_green_full"
                 android:text="提交"
                 android:textColor="@color/white"

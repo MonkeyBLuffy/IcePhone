@@ -1,6 +1,8 @@
 package com.icephone.yuhao.repairerecord.bean;
 
-public class RepairRecordBean {
+import java.io.Serializable;
+
+public class RepairRecordBean implements Serializable {
 
     private String _id;
     private String time;

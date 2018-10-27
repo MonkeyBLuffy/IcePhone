@@ -12,6 +12,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.icephone.yuhao.repairerecord.R;
@@ -19,6 +20,7 @@ import com.icephone.yuhao.repairerecord.Util.DialogUtil;
 import com.icephone.yuhao.repairerecord.Util.StringConstant;
 import com.icephone.yuhao.repairerecord.Util.TimeUtil;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
+import com.icephone.yuhao.repairerecord.bean.RepairRecordBean;
 
 import java.util.Calendar;
 
@@ -51,6 +53,10 @@ public class RecordDetailActivity extends BaseActivity {
     @BindView(R.id.tv_center_name)
     TextView centerNameView;
 
+    @BindView(R.id.ll_time)
+    LinearLayout llTime;
+    @BindView(R.id.rl_center_name)
+    RelativeLayout rvCenterName;
 
     @OnClick(R.id.ll_time)
     void showTimeDialog() {
@@ -60,7 +66,7 @@ public class RecordDetailActivity extends BaseActivity {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 calendar.set(year,month,dayOfMonth);
                 timeView.setText(TimeUtil.getShowTime(calendar));
-                timeStr = TimeUtil.getUploadTime(calendar);
+                time = TimeUtil.getUploadTime(calendar);
             }
         });
     }
@@ -68,7 +74,7 @@ public class RecordDetailActivity extends BaseActivity {
     @OnClick(R.id.rl_center_name)
     void chooseCenterName() {
         final String[] item = {"清苑联社", "满城联社"};
-        DialogUtil.showSingalChooseDialog(this, "选择联社", item,
+        DialogUtil.showSingleChooseDialog(this, "选择联社", item,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -79,10 +85,10 @@ public class RecordDetailActivity extends BaseActivity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        center_name = item[which];
                         centerNameView.setText(item[which]);
                     }
                 }
-
         );
     }
 
@@ -93,13 +99,17 @@ public class RecordDetailActivity extends BaseActivity {
 
     @OnClick(R.id.iv_edit)
     void editRecord() {
-        btSubmit.setVisibility(View.VISIBLE);
-        ToastUtil.showToastShort(this,"编辑");
+        setViewTouchable();
+        ToastUtil.showToastShort(this,"编辑模式");
     }
 
     @OnClick(R.id.bt_submit)
     void submit() {
-        ToastUtil.showToastShort(this,"提交");
+        if (isTextNull()) {
+            //TODO 上传操作
+            openActivity(SuccessActivity.class);
+            finish();
+        }
     }
 
     @OnClick(R.id.rl_back)
@@ -109,7 +119,12 @@ public class RecordDetailActivity extends BaseActivity {
 
 
     private Calendar calendar = Calendar.getInstance(); //获取当前时间
-    private String timeStr; //选择的时间，默认是当前时间
+    private String time = ""; //选择的时间，默认是当前时间
+    private String site_name = "";
+    private String repair_pro = "";
+    private String repair_person = "";
+    private String site_person = "";
+    private String center_name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,22 +166,106 @@ public class RecordDetailActivity extends BaseActivity {
 
     }
 
+    private boolean isTextNull() {
+        if (time.equals("")) {
+            ToastUtil.showToastShort(this,"请填写时间");
+            return false;
+        }
+        if (center_name.equals("")) {
+            ToastUtil.showToastShort(this,"请选择联社名称");
+        }
+        site_name = siteNameView.getText() == null ? "" : siteNameView.getText().toString();
+        if (site_name.equals("")) {
+            ToastUtil.showToastShort(this,"请填写网点全称");
+            return false;
+        }
+        repair_pro = repairProView.getText() == null ? "" : repairProView.getText().toString();
+        if (repair_pro.equals("")) {
+            ToastUtil.showToastShort(this,"请填写维修项目");
+            return false;
+        }
+        repair_person = repairPersonView.getText() == null ? "" : repairPersonView.getText().toString();
+        if (repair_person.equals("")) {
+            ToastUtil.showToastShort(this,"请填写维修人员");
+            return false;
+        }
+        site_person = sitePersonView.getText() == null ? "" : sitePersonView.getText().toString();
+        if (site_person.equals("")) {
+            ToastUtil.showToastShort(this,"请填写网点人员");
+            return false;
+        }
+        return true;
+    }
+
     /**
-     * 添加记录View
+     * 添加记录，把当前时间更新到对应时间
      */
     public void addRecordView() {
+        time = TimeUtil.getUploadTime(calendar);
         timeView.setText(TimeUtil.getShowTime(calendar));
     }
 
     /**
-     * 查看记录
+     * 查看记录，把传过来的数据更新到View
      */
     public void putDataToView() {
+        RepairRecordBean bean = (RepairRecordBean) getIntent().getSerializableExtra(StringConstant.KEY_TRANSFER_RECORD);
 
+        time = bean.getTime();
+        timeView.setText(TimeUtil.transferTimeToShow(time));
+
+        center_name = bean.getCenter_name();
+        centerNameView.setText(center_name);
+
+        site_name = bean.getSite_name();
+        siteNameView.setText(site_name);
+
+        repair_person = bean.getRepair_person();
+        repairPersonView.setText(repair_person);
+
+        repair_pro = bean.getRepair_pro();
+        repairProView.setText(repair_pro);
+
+        site_person = bean.getSite_person();
+        sitePersonView.setText(site_person);
+
+        setViewUntouchable();
     }
 
-    public void showDateDialog() {
+    /**
+     * 设置View不可编辑
+     */
+    public void setViewUntouchable() {
+        llTime.setEnabled(false);
+        rvCenterName.setEnabled(false);
+        siteNameView.setFocusable(false);
+        repairPersonView.setFocusable(false);
+        sitePersonView.setFocusable(false);
+        repairProView.setFocusable(false);
+    }
 
+    /**
+     * 设置View可以编辑
+     */
+    public void setViewTouchable() {
+        llTime.setEnabled(true);
+        llTime.setEnabled(true);
+        rvCenterName.setEnabled(true);
+        rvCenterName.setFocusableInTouchMode(true);
+
+        repairPersonView.setFocusable(true);
+        repairPersonView.setFocusableInTouchMode(true);
+
+        sitePersonView.setFocusable(true);
+        sitePersonView.setFocusableInTouchMode(true);
+
+        repairProView.setFocusable(true);
+        repairProView.setFocusableInTouchMode(true);
+
+        btSubmit.setVisibility(View.VISIBLE);
+        siteNameView.setFocusable(true);
+        siteNameView.setFocusableInTouchMode(true);
+        siteNameView.requestFocus();
     }
 
 }

@@ -16,19 +16,19 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.cv_search_record)
     void searchRecord() {
-        toOtherActivity(SearchRecordActivity.class);
+        openActivity(SearchRecordActivity.class);
     }
 
     @OnClick(R.id.cv_add_record)
     void addRecord() {
         Bundle bundle = new Bundle();
         bundle.putString(StringConstant.KEY_MODE,StringConstant.KEY_ADD_MODE);
-        toOtherActivity(RecordDetailActivity.class,bundle);
+        openActivity(RecordDetailActivity.class,bundle);
     }
 
     @OnClick(R.id.cv_manage_center)
     void manageCenter() {
-        toOtherActivity(CenterListActivity.class);
+        openActivity(CenterListActivity.class);
     }
 
     @Override

@@ -4,4 +4,5 @@
     <string name="addRecord">添加记录</string>
     <string name="searchRecord">查询记录</string>
     <string name="searchResult">维修记录</string>
+    <string name="hint_site_name">请输入网点全称</string>
 </resources>
