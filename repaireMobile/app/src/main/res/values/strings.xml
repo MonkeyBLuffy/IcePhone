@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">RepaireRecord</string>
     <string name="centerManage">联社管理</string>
-    <string name="addRecord">添加记录</string>
+    <string name="addRecord">维修记录</string>
     <string name="searchRecord">查询记录</string>
     <string name="searchResult">维修记录</string>
     <string name="hint_site_name">请输入网点全称</string>
+    <string name="managePeople">人员管理</string>
+    <string name="repairPro">维修项目</string>
+    <string name="siteManage">网点管理</string>
 </resources>

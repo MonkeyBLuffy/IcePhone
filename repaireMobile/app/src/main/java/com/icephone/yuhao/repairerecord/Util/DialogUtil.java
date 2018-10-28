@@ -49,11 +49,10 @@ public class DialogUtil {
 
     public static void showEditTextDialog(Context context,
                                        String title,
+                                       View view,
                                        DialogInterface.OnClickListener positiveListener,
                                        DialogInterface.OnClickListener negativeListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        View view = View.inflate(context, R.layout.layout_dialog_edit, null);
-        EditText editText = view.findViewById(R.id.et_add_center);
         builder.setPositiveButton("确定", positiveListener);
         builder.setNegativeButton("取消", negativeListener);
         AlertDialog dialog = builder.create();
@@ -71,6 +70,21 @@ public class DialogUtil {
                                               DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setSingleChoiceItems(item,-1,listener);
+        builder.setPositiveButton("确定", positiveListener);
+        AlertDialog dialog = builder.create();
+        dialog.setTitle(title);
+        dialog.show();
+
+    }
+
+    public static void showMultiChooseDialog(Context context,
+                                              String title,
+                                              String[] item,
+                                              boolean[] itemChecked,
+                                              DialogInterface.OnClickListener positiveListener,
+                                              DialogInterface.OnMultiChoiceClickListener listener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMultiChoiceItems(item,itemChecked,listener);
         builder.setPositiveButton("确定", positiveListener);
         AlertDialog dialog = builder.create();
         dialog.setTitle(title);

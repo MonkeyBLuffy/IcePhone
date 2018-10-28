@@ -16,11 +16,6 @@ public class SuccessActivity extends BaseActivity {
         onBackPressed();
     }
 
-    @OnClick({R.id.fl_add_center})
-    void addCenter() {
-
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

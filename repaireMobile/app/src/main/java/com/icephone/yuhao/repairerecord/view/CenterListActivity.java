@@ -31,10 +31,9 @@ public class CenterListActivity extends BaseActivity {
 
     @OnClick(R.id.fl_add_center)
     void addCenter() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = View.inflate(this, R.layout.layout_dialog_edit, null);
-        final EditText editText = view.findViewById(R.id.et_add_center);
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        final EditText editText = view.findViewById(R.id.et_add);
+        DialogUtil.showEditTextDialog(this, "修改联社", view, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String newCenterName = editText.getText() == null ? "" : editText.getText().toString();
@@ -46,12 +45,7 @@ public class CenterListActivity extends BaseActivity {
                     dialog.dismiss();
                 }
             }
-        });
-        builder.setNegativeButton("取消", null);
-        AlertDialog dialog = builder.create();
-        dialog.setTitle("添加联社");
-        dialog.setView(view);
-        dialog.show();
+        },null);
     }
 
     @OnClick(R.id.rl_back)

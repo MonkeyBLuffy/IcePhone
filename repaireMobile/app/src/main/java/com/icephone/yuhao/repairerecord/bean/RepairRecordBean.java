@@ -11,8 +11,10 @@ public class RepairRecordBean implements Serializable {
     private String repair_person;
     private String site_person;
     private String center_name;
+    private String fix_details;
+    private String fittings;
 
-    public RepairRecordBean(String id, String time, String site_name, String repair_pro,String repair_person, String site_person, String center_name) {
+    public RepairRecordBean(String id, String time, String site_name, String repair_pro, String repair_person, String site_person, String center_name, String fix_details, String fittings) {
         this._id = id;
         this.time = time;
         this.site_name = site_name;
@@ -20,6 +22,8 @@ public class RepairRecordBean implements Serializable {
         this.repair_person = repair_person;
         this.site_person = site_person;
         this.center_name = center_name;
+        this.fix_details = fix_details;
+        this.fittings = fittings;
     }
 
     public String get_id() {
@@ -78,4 +82,19 @@ public class RepairRecordBean implements Serializable {
         this.center_name = center_name;
     }
 
+    public String getFix_details() {
+        return fix_details;
+    }
+
+    public void setFix_details(String fix_details) {
+        this.fix_details = fix_details;
+    }
+
+    public String getFittings() {
+        return fittings;
+    }
+
+    public void setFittings(String fittings) {
+        this.fittings = fittings;
+    }
 }
