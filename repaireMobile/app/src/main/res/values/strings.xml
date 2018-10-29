@@ -8,4 +8,6 @@
     <string name="managePeople">人员管理</string>
     <string name="repairPro">维修项目</string>
     <string name="siteManage">网点管理</string>
+    <string name="manageFitting">设备明细</string>
+    <string name="manageInstall">安装记录</string>
 </resources>

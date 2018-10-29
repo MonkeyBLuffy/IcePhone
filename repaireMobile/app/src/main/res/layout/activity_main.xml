@@ -9,25 +9,25 @@
     tools:context=".MainActivity">
 
     <RelativeLayout
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:layout_height="48dp"
+        android:background="@color/white">
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
             android:text="保定固弘安防"
             android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:textSize="18sp" />
 
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
 
@@ -46,21 +46,21 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_search"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_search"
                     android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_search" />
 
                 <TextView
-                    android:text="@string/searchRecord"
-                    android:layout_marginTop="5dp"
-                    android:layout_centerInParent="true"
-                    android:layout_below="@+id/iv_search"
-                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_search"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/searchRecord"
+                    android:textColor="@color/black" />
 
             </RelativeLayout>
 
@@ -70,9 +70,9 @@
             android:id="@+id/cv_add_record"
             android:layout_width="0dp"
             android:layout_height="120dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="10dp"
@@ -84,33 +84,33 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_record"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_record"
                     android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_record" />
+
                 <TextView
-                    android:text="@string/addRecord"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/black"
-                    android:layout_centerInParent="true"
-                    android:layout_below="@+id/iv_record"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_record"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/addRecord"
+                    android:textColor="@color/black" />
 
             </RelativeLayout>
-
 
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
-            android:id="@+id/cv_repair_pro"
+            android:id="@+id/cv_install"
             android:layout_width="0dp"
             android:layout_height="120dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="10dp"
@@ -122,22 +122,24 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:layout_marginTop="25dp"
-                    android:id="@+id/iv_repair_pro"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_repair_pro"
+                    android:id="@+id/iv_install"
                     android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_install" />
+
                 <TextView
-                    android:text="@string/repairPro"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/black"
-                    android:layout_centerInParent="true"
-                    android:layout_below="@+id/iv_repair_pro"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_install"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/manageInstall"
+                    android:textColor="@color/black" />
 
             </RelativeLayout>
+
 
         </android.support.v7.widget.CardView>
 
@@ -164,21 +166,21 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_manage_people"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_person"
                     android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_person" />
 
                 <TextView
-                    android:text="@string/managePeople"
-                    android:layout_marginTop="5dp"
-                    android:layout_centerInParent="true"
-                    android:layout_below="@+id/iv_manage_people"
-                    android:textColor="@color/black"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_manage_people"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/managePeople"
+                    android:textColor="@color/black" />
 
             </RelativeLayout>
 
@@ -188,9 +190,9 @@
             android:id="@+id/cv_manage_center"
             android:layout_width="0dp"
             android:layout_height="120dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="10dp"
@@ -202,20 +204,21 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_manage_center"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_center"
                     android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_center" />
+
                 <TextView
-                    android:text="@string/centerManage"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/black"
-                    android:layout_centerInParent="true"
-                    android:layout_below="@+id/iv_manage_center"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_manage_center"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/centerManage"
+                    android:textColor="@color/black" />
 
             </RelativeLayout>
 
@@ -226,9 +229,9 @@
             android:id="@+id/cv_site_manage"
             android:layout_width="0dp"
             android:layout_height="120dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="10dp"
@@ -240,25 +243,118 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:layout_marginTop="25dp"
                     android:id="@+id/iv_manage_site"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_site_manage"
                     android:layout_width="50dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_site_manage" />
+
                 <TextView
-                    android:text="@string/siteManage"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/black"
-                    android:layout_centerInParent="true"
-                    android:layout_below="@+id/iv_manage_site"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_manage_site"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/siteManage"
+                    android:textColor="@color/black" />
 
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_manage_fitting"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="3dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_manage_fitting"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_fitting" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_manage_fitting"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/manageFitting"
+                    android:textColor="@color/black" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_repair_pro"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="3dp">
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_repair_pro"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_repair_pro" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_repair_pro"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/repairPro"
+                    android:textColor="@color/black" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        
+
+        <FrameLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
 
     </LinearLayout>
 
