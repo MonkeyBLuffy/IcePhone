@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.icephone.yuhao.repairerecord">
 
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,7 +28,13 @@
         <activity android:name=".view.SuccessActivity" />
         <activity android:name=".view.ManagePeopleActivity" />
         <activity android:name=".view.ManageRepairProActivity" />
-        <activity android:name=".view.ManageSiteActivity"></activity>
+        <activity android:name=".view.ManageSiteActivity" />
+        <activity android:name=".view.ManageFittingAvtivity" />
+        <activity android:name=".view.InstallRecordDetailActivity" />
+        <activity android:name=".view.PeopleDetailActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/title_activity_login"></activity>
     </application>
 
 </manifest>

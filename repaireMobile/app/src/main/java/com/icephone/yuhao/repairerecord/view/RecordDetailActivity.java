@@ -53,6 +53,9 @@ public class RecordDetailActivity extends BaseActivity {
     private String center_name = "";
     private String fix_details = "";
     private String fitting = "";
+    private String returnFix = "";
+    private String returnTime = "";
+
 
     private String[] item = {"监控", "报警", "其他"};
     private boolean[] itemIsChecked = {false, false, false};
@@ -76,22 +79,28 @@ public class RecordDetailActivity extends BaseActivity {
     @BindView(R.id.bt_submit)
     Button btSubmit;
 
-    @BindView(R.id.tv_time)
+    @BindView(R.id.tv_time) //时间（选择）
     TextView timeView;
-    @BindView(R.id.tv_site_name)
+    @BindView(R.id.tv_site_name) //网点名称（单选）
     TextView siteNameView;
-    @BindView(R.id.tv_repair_pro)
+    @BindView(R.id.tv_repair_pro) //维修项目（多选）
     TextView repairProView;
-    @BindView(R.id.tv_repair_person)
+    @BindView(R.id.tv_repair_person) //维修人员（多选）
     TextView repairPersonView;
-    @BindView(R.id.tv_center_name)
+    @BindView(R.id.tv_center_name) //联社名称（单选）
     TextView centerNameView;
-    @BindView(R.id.et_fix_details)
+    @BindView(R.id.et_fix_details) //维修详情（填写）
     TextView fixDetailsView;
-    @BindView(R.id.et_fittings)
-    EditText fittingView;
-    @BindView(R.id.et_site_person)
+    @BindView(R.id.tv_fitting) //设备明细（多选）
+    TextView fittingView;
+    @BindView(R.id.et_site_person) //网点人员（填写）
     EditText sitePersonView;
+    @BindView(R.id.tv_return_time) //返厂时间（选择）
+    TextView returnTimeView;
+    @BindView(R.id.tv_return_fix) //是否返厂维修（选择）
+    TextView returnFixView;
+    @BindView(R.id.et_cost) //花费（管理员填写）
+    EditText costView;
 
     @BindView(R.id.ll_time)
     LinearLayout llTime;
@@ -103,6 +112,12 @@ public class RecordDetailActivity extends BaseActivity {
     RelativeLayout rlRepairPro;
     @BindView(R.id.rl_repair_person)
     RelativeLayout rlRepairPerson;
+    @BindView(R.id.rl_return_time)
+    RelativeLayout rlReturnTime;
+    @BindView(R.id.rl_return_fix)
+    RelativeLayout rlReturnFix;
+    @BindView(R.id.rl_fitting)
+    RelativeLayout rlFitting;
 
     @OnClick(R.id.ll_time)
     void showTimeDialog() {
@@ -201,6 +216,46 @@ public class RecordDetailActivity extends BaseActivity {
                     }
                 }
         );
+    }
+
+    @OnClick(R.id.rl_return_time)
+    void chooseReturnTime() {
+        DialogUtil.showDateDialog(this, calendar, new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(year, month, dayOfMonth);
+                returnTimeView.setText(TimeUtil.getShowTime(calendar));
+                //TODO 添加变量
+//                time = TimeUtil.getUploadTime(calendar);
+            }
+        });
+    }
+
+    @OnClick(R.id.rl_return_fix)
+    void chooseReturnFix() {
+        final String[] item = {"未返厂维修","返厂维修"};
+        DialogUtil.showSingleChooseDialog(this, "选择是否返厂", item,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //TODO 添加变量哦
+                        returnFixView.setText(item[which]);
+                    }
+                }
+        );
+    }
+
+    @OnClick(R.id.rl_fitting)
+    void chooseFitting() {
+        // TODO 选择配件，多选
     }
 
     @OnClick(R.id.iv_delete)

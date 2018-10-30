@@ -6,6 +6,8 @@ import android.os.Bundle;
 import com.icephone.yuhao.repairerecord.Util.StringConstant;
 import com.icephone.yuhao.repairerecord.view.BaseActivity;
 import com.icephone.yuhao.repairerecord.view.CenterListActivity;
+import com.icephone.yuhao.repairerecord.view.InstallRecordDetailActivity;
+import com.icephone.yuhao.repairerecord.view.ManageFittingAvtivity;
 import com.icephone.yuhao.repairerecord.view.ManagePeopleActivity;
 import com.icephone.yuhao.repairerecord.view.ManageRepairProActivity;
 import com.icephone.yuhao.repairerecord.view.ManageSiteActivity;
@@ -47,6 +49,16 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.cv_site_manage)
     void manageSite() {
         openActivity(ManageSiteActivity.class);
+    }
+
+    @OnClick(R.id.cv_install)
+    void manageRepairPro() {
+        openActivity(InstallRecordDetailActivity.class);
+    }
+
+    @OnClick(R.id.cv_manage_fitting)
+    void manageFitting() {
+        openActivity(ManageFittingAvtivity.class);
     }
 
     @Override

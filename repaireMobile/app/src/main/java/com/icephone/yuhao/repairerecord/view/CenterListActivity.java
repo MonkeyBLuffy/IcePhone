@@ -1,10 +1,6 @@
 package com.icephone.yuhao.repairerecord.view;
 
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.LayoutRes;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -106,7 +102,7 @@ public class CenterListActivity extends BaseActivity {
         centerBeanList.add(new CenterBean("1","清苑联社"));
         centerBeanList.add(new CenterBean("2","满城联社"));
 
-        centerAdapter = new CenterAdapter(R.layout.layout_center_item,centerBeanList);
+        centerAdapter = new CenterAdapter(R.layout.layout_simple_item,centerBeanList);
     }
 
 }
