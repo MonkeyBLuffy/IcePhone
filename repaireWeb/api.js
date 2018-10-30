@@ -154,34 +154,33 @@ module.exports = function (app) {
   })
 
   //设备详细=====================================
-  //查询设备详细
+  //查询设备详细————完成
   app.get('/repair/app/getDeviceList', function (req, res) {
-    let centerBean = [];
+    let deviceBean = [];
 
-    // center
-    const getCenter = new Promise((resolve, reject) => {
-      db.center.find(
+    const getDevice = new Promise((resolve, reject) => {
+      db.device.find(
         {},
         function (err, doc) {
           if (err) {
-            console.log('center find error!');
-            reject('reject center')
+            console.log('device find error!');
+            reject('reject device')
           } else {
             if (!doc) {
-              centerBean = [];
+              deviceBean = [];
             } else {
-              centerBean = doc;
+              deviceBean = doc;
             }
-            resolve(centerBean)
+            resolve(deviceBean)
           }
         })
     })
 
-    const p_all = Promise.all([getCenter])
+    const p_all = Promise.all([getDevice])
 
     p_all.then((suc) => {
       let data = {
-        "CenterBean": suc[0]
+        "DeviceBean": suc[0]
       }
       res.json({ code: 200, msg: '查询成功', data: data })
       return

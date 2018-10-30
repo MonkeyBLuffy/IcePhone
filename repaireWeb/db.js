@@ -73,6 +73,11 @@ database.once('open', function(){
 const db = {
   center: mongoose.model('centers', centerSchema),
   repair: mongoose.model('repairs', repairSchema),
+  device: mongoose.model('devices', deviceSchema),
+  install: mongoose.model('installs', installSchema),
+  project: mongoose.model('projects', projectSchema),
+  site: mongoose.model('sites', siteSchema),
+  person: mongoose.model('persons', personSchema),
 }
 
 module.exports = db
