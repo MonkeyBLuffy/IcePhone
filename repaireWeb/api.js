@@ -13,7 +13,7 @@ module.exports = function (app) {
 
   //维修列表================================================================================
 
-  //获取维修列表 //完成
+  //获取维修列表————完成
   app.get('/repair/app/getrepairList', function (req, res) {
     
     let repairBean = [];
@@ -64,12 +64,23 @@ module.exports = function (app) {
     })
   })
 
-  //删除维修记录
+  //删除维修记录————完成
   app.get('/repair/app/deleterepairRecord', function (req, res) {
-
+      console.log(req.query)
+      db.repair.findByIdAndRemove(
+        req.query._id,
+        function(err,doc){
+          if(err){
+            console.log(err)
+            res.json({code:700,msg:'删除失败'})
+          }else{
+            res.json({code:200,msg:'删除成功'})
+          }
+        }
+      )
   })
 
-  //修改维修记录--完成
+  //修改维修记录————完成
   app.post('/repair/app/changerepairRecord', function (req, res) {
     console.log(req.body)
     db.repair.findByIdAndUpdate(
@@ -79,7 +90,7 @@ module.exports = function (app) {
       function(err,doc){
         if (err) {
           console.log('修改错误：' + err);
-          res.json({code: 700, msg:'查询出错：' + err})
+          res.json({code: 700, msg:'修改失败：'})
           return
         } else{
           res.json({code: 200, msg:'修改成功'})
@@ -88,7 +99,7 @@ module.exports = function (app) {
     )
   })
 
-  //增加维修记录--完成
+  //增加维修记录————完成
   app.post('/repair/app/addrepairRecord', function (req, res) {
     db.repair.create(
       req.body,
@@ -114,6 +125,7 @@ module.exports = function (app) {
     const getCenter = new Promise((resolve, reject) => {
       db.center.find(
         {},
+        {__v:0},
         function (err, doc) {
           if (err) {
             console.log('center find error!');
@@ -144,13 +156,31 @@ module.exports = function (app) {
     })
 
   })
-  //删除中心记录
+  //删除中心记录————完成
   app.get('/repair/app/deleteCenterRecord', function (req, res) {
-
+      db.center.findByIdAndRemove(
+        req.query._id,
+        function(err,doc){
+          if(err){
+            res.json({code:700,msg:'删除失败'})
+          }else{
+            res.json({code:200,msg:'删除成功'})
+          }
+        }
+      )
   })
-  //增加中心记录
-  app.post('/repair/app/addCenterRecord', function (req, res) {
-
+  //增加中心记录————完成
+  app.get('/repair/app/addCenterRecord', function (req, res) {
+    db.center.create(
+      {center_name:req.query.center_name},
+      function(err,doc){
+        if(err){
+          res.json({code:700,msg:'添加失败'})
+        }else{
+          res.json({code:200, msg:'添加成功'})
+        }
+      }
+      )
   })
 
   //设备详细=====================================
@@ -191,20 +221,38 @@ module.exports = function (app) {
     })
 
   })
-  //增加设备详细
+  //增加设备详细————完成
   app.get('/repair/app/addDevice', function (req, res) {
-
+    db.device.create(
+      {center_name:req.query.device_name},
+      function(err,doc){
+        if(err){
+          res.json({code:700,msg:'添加失败'})
+        }else{
+          res.json({code:200, msg:'添加成功'})
+        }
+      }
+    )
   })
-  //删除设备详细
+  //删除设备详细————完成
   app.post('/repair/app/deleteDevice', function (req, res) {
-
+    db.decive.findByIdAndRemove(
+      req.query._id,
+      function(err,doc){
+        if(err){
+          res.json({code:700,msg:'删除失败'})
+        }else{
+          res.json({code:200,msg:'删除成功'})
+        }
+      }
+    )
   })
 
   //人员管理=======================================
   //查询人员
-  app.get('/repair/app/getrepairList', function (req, res) {
+  app.get('/repair/app/getPersonList', function (req, res) {
     
-    let repairBean = [];
+    let personBean = [];
     const param = {};
     const time = {};
     if(req.query.centerName!=undefined) param.center_name = req.query.centerName;
@@ -251,13 +299,31 @@ module.exports = function (app) {
       return
     })
   })
-  //增加人员
-  app.get('/repair/app/addPerson', function (req, res) {
-
+  //增加人员————完成
+  app.post('/repair/app/addPerson', function (req, res) {
+    db.person.create(
+      req.body,
+      function(err,doc){
+        if(err){
+          res.json({code:700,msg:'添加失败'})
+        }else{
+          res.json({code:200, msg:'添加成功'})
+        }
+      }
+      )
   })
-  //删除人员
+  //删除人员————完成
   app.get('/repair/app/deletePerson', function (req, res) {
-
+    db.person.findByIdAndRemove(
+      req.query._id,
+      function(err,doc){
+        if(err){
+          res.json({code:700,msg:'删除失败'})
+        }else{
+          res.json({code:200,msg:'删除成功'})
+        }
+      }
+    )
   })
   //修改人员
   app.post('/repair/app/changePerson', function (req, res) {
@@ -267,32 +333,32 @@ module.exports = function (app) {
   //维修项目明细====================================
   //查询项目详细
   app.get('/repair/app/getProjectList', function (req, res) {
-    let centerBean = [];
+    let projectBean = [];
 
-    // center
-    const getCenter = new Promise((resolve, reject) => {
-      db.center.find(
+    // project
+    const getProject = new Promise((resolve, reject) => {
+      db.project.find(
         {},
         function (err, doc) {
           if (err) {
-            console.log('center find error!');
-            reject('reject center')
+            console.log('project find error!');
+            reject('reject project')
           } else {
             if (!doc) {
-              centerBean = [];
+              projectBean = [];
             } else {
-              centerBean = doc;
+              projectBean = doc;
             }
-            resolve(centerBean)
+            resolve(projectBean)
           }
         })
     })
 
-    const p_all = Promise.all([getCenter])
+    const p_all = Promise.all([getProject])
 
     p_all.then((suc) => {
       let data = {
-        "CenterBean": suc[0]
+        "ProjectBean": suc[0]
       }
       res.json({ code: 200, msg: '查询成功', data: data })
       return
@@ -303,44 +369,62 @@ module.exports = function (app) {
     })
 
   })
-  //增加设备详细
+  //增加项目详细————完成
   app.get('/repair/app/addProject', function (req, res) {
-
+    db.project.create(
+      {center_name:req.query.project_name},
+      function(err,doc){
+        if(err){
+          res.json({code:700,msg:'添加失败'})
+        }else{
+          res.json({code:200, msg:'添加成功'})
+        }
+      }
+      )
   })
-  //删除设备详细
+  //删除设备详细————完成
   app.post('/repair/app/deleteProject', function (req, res) {
-
+    db.project.findByIdAndRemove(
+      req.query._id,
+      function(err,doc){
+        if(err){
+          res.json({code:700,msg:'删除失败'})
+        }else{
+          res.json({code:200,msg:'删除成功'})
+        }
+      }
+    )
   })
 
   //维修网点明细====================================
   //查询网点详细
   app.get('/repair/app/getSiteList', function (req, res) {
-    let centerBean = [];
+    let siteBean = [];
 
-    // center
-    const getCenter = new Promise((resolve, reject) => {
-      db.center.find(
+    // site
+    const getSite = new Promise((resolve, reject) => {
+      db.site.find(
         {},
         function (err, doc) {
           if (err) {
-            console.log('center find error!');
-            reject('reject center')
+            console.log('site find error!');
+            reject('reject site')
           } else {
             if (!doc) {
-              centerBean = [];
+              siteBean = [];
             } else {
-              centerBean = doc;
+              siteBean = doc;
             }
-            resolve(centerBean)
+            resolve(siteBean)
           }
         })
     })
 
-    const p_all = Promise.all([getCenter])
+    const p_all = Promise.all([getSite])
 
     p_all.then((suc) => {
       let data = {
-        "CenterBean": suc[0]
+        "SiteBean": suc[0]
       }
       res.json({ code: 200, msg: '查询成功', data: data })
       return
@@ -351,13 +435,31 @@ module.exports = function (app) {
     })
 
   })
-  //增加设备详细
+  //增加网点详细————完成
   app.get('/repair/app/addSite', function (req, res) {
-
+    db.site.create(
+      {center_name:req.query.site_name},
+      function(err,doc){
+        if(err){
+          res.json({code:700,msg:'添加失败'})
+        }else{
+          res.json({code:200, msg:'添加成功'})
+        }
+      }
+      )
   })
-  //删除设备详细
+  //删除网点详细————完成
   app.post('/repair/app/deleteSite', function (req, res) {
-
+    db.site.findByIdAndRemove(
+      req.query._id,
+      function(err,doc){
+        if(err){
+          res.json({code:700,msg:'删除失败'})
+        }else{
+          res.json({code:200,msg:'删除成功'})
+        }
+      }
+    )
   })
 
   app.get('*', function (req, res) {
