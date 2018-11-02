@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const DB_URL = 'mongodb://127.0.0.1:27017/repairdb';
+//const DB_URL = 'mongodb://127.0.0.1:27017/repairdb';
+const DB_URL = 'mongodb://repairOwner:guhonganfang@47.95.114.59:27017/repairdb'
 
 // 中心的数据结构模型
 const centerSchema = new Schema({
@@ -59,7 +60,7 @@ const siteSchema = new Schema({
 
 mongoose.set('useFindAndModify', false)
 mongoose.Promise = global.Promise;
-mongoose.connect(DB_URL);
+mongoose.connect(DB_URL,{useNewUrlParser: true});
 const database =  mongoose.connection;
 database.on('error', function(error){
   console.log('数据库repairdb连接失败：' + error)
