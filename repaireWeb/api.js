@@ -257,47 +257,38 @@ module.exports = function (app) {
   })
 
   //人员管理=======================================
-  //查询人员
+  //查询人员————完成
   app.get('/repair/app/getPersonList', function (req, res) {
     
     let personBean = [];
     const param = {};
-    const time = {};
     if(req.query.centerName!=undefined) param.center_name = req.query.centerName;
-    if(req.query.startTime!=undefined) {
-      time.$gte = req.query.startTime;
-      param.time = time;
-    }
-    if(req.query.endTime!=undefined) {
-      time.$lte = req.query.endTime;
-      param.time = time;
-    }
     console.log(param)
     // repair
-    const getrepairBean = new Promise((resolve, reject) => {
-      db.repair.find(
+    const getPersonBean = new Promise((resolve, reject) => {
+      db.person.find(
         param,
         {__v:0},
         function (err, doc) {
           if (err) {
-            console.log('repairBean find error!')
-            reject('reject repairBean')
+            console.log('personBean find error!')
+            reject('reject personBean')
           } else {
             if (!doc) {
-              repairBean = [];
+              personBean = [];
             } else {
-              repairBean = doc;
+              personBean = doc;
             }
-            resolve(repairBean)
+            resolve(personBean)
           }
         })
     })
 
-    const p_all = Promise.all([getrepairBean])
+    const p_all = Promise.all([getPersonBean])
 
     p_all.then((suc) => {
       let data = {
-        "repairBean": suc[0]
+        "personBean": suc[0]
       }
       res.json({ code: 200, msg: '查询成功', data: data })
       return
@@ -333,9 +324,23 @@ module.exports = function (app) {
       }
     )
   })
-  //修改人员
+  //修改人员————完成
   app.post('/repair/app/changePerson', function (req, res) {
-
+    console.log(req.body)
+    db.person.findByIdAndUpdate(
+      req.body._id,
+      req.body,
+      {upsert:true},
+      function(err,doc){
+        if (err) {
+          console.log('修改错误：' + err);
+          res.json({code: 700, msg:'修改失败：'})
+          return
+        } else{
+          res.json({code: 200, msg:'修改成功'})
+        }
+      }
+    )
   })
 
   //联社中心==========================================完成了！！！
