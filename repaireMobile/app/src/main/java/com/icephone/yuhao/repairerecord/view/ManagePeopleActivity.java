@@ -17,6 +17,7 @@ import com.icephone.yuhao.repairerecord.Util.ToastUtil;
 import com.icephone.yuhao.repairerecord.adapter.PeopleAdapter;
 import com.icephone.yuhao.repairerecord.bean.PeopleBean;
 
+import java.sql.BatchUpdateException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +42,9 @@ public class ManagePeopleActivity extends BaseActivity {
     @OnClick(R.id.fl_add)
     void add() {
         //TODO 人员管理的页面稍微复杂一些，需要同时设置账号密码
+        Bundle bundle = new Bundle();
+        bundle.putString(StringConstant.KEY_PEOPLE_MODE, StringConstant.KEY_ADD_PEOPLE);
+        openActivity(PeopleDetailActivity.class, bundle);
     }
 
     @OnClick(R.id.rl_back)
@@ -60,6 +64,9 @@ public class ManagePeopleActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 // 需要传递各种数据
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(StringConstant.KEY_TRANSFER_PEOPLE,peopleBeanList.get(position));
+                bundle.putSerializable(StringConstant.KEY_PEOPLE_MODE, StringConstant.KEY_LOOK_PEOPLE);
                 openActivity(PeopleDetailActivity.class);
             }
         });

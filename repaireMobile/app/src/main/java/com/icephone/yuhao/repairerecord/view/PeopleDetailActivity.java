@@ -31,4 +31,5 @@ public class PeopleDetailActivity extends BaseActivity {
     public void initDate() {
 
     }
+    
 }

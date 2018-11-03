@@ -1,6 +1,8 @@
 package com.icephone.yuhao.repairerecord.bean;
 
-public class PeopleBean {
+import java.io.Serializable;
+
+public class PeopleBean implements Serializable {
 
     private String _id;
     private String nick_name;
