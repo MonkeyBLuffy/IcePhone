@@ -67,6 +67,43 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/cv_search_install"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="3dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_search_install"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_search" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_search_install"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/searchInstallRecord"
+                    android:textColor="@color/black" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
             android:id="@+id/cv_add_record"
             android:layout_width="0dp"
             android:layout_height="120dp"
@@ -104,13 +141,18 @@
 
         </android.support.v7.widget.CardView>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <android.support.v7.widget.CardView
             android:id="@+id/cv_install"
             android:layout_width="0dp"
             android:layout_height="120dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_margin="10dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="10dp"
@@ -143,13 +185,88 @@
 
         </android.support.v7.widget.CardView>
 
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_manage_fitting"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="3dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_manage_fitting"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_fitting" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_manage_fitting"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/manageFitting"
+                    android:textColor="@color/black" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_repair_pro"
+            android:layout_width="0dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="3dp">
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_repair_pro"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="25dp"
+                    android:src="@drawable/ic_repair_pro" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_repair_pro"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/repairPro"
+                    android:textColor="@color/black" />
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
 
         <android.support.v7.widget.CardView
             android:id="@+id/cv_manage_people"
@@ -264,97 +381,5 @@
         </android.support.v7.widget.CardView>
 
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/cv_manage_fitting"
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="3dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/iv_manage_fitting"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="25dp"
-                    android:src="@drawable/ic_fitting" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/iv_manage_fitting"
-                    android:layout_centerInParent="true"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/manageFitting"
-                    android:textColor="@color/black" />
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/cv_repair_pro"
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="3dp">
-
-            <RelativeLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/iv_repair_pro"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="25dp"
-                    android:src="@drawable/ic_repair_pro" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/iv_repair_pro"
-                    android:layout_centerInParent="true"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/repairPro"
-                    android:textColor="@color/black" />
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1">
-
-        </FrameLayout>
-
-    </LinearLayout>
-
 
 </LinearLayout>
