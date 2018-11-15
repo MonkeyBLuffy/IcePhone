@@ -4,18 +4,18 @@ import android.support.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.icephone.yuhao.repairerecord.bean.SiteBean;
+import com.icephone.yuhao.repairerecord.bean.DeviceBean;
 
 import java.util.List;
 
-public class SiteAdapter extends BaseQuickAdapter<SiteBean,BaseViewHolder> {
+public class DeviceAdapter extends BaseQuickAdapter<DeviceBean,BaseViewHolder> {
 
-    public SiteAdapter(int layoutResId, @Nullable List<SiteBean> data) {
+    public DeviceAdapter(int layoutResId, @Nullable List<DeviceBean> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, SiteBean item) {
+    protected void convert(BaseViewHolder helper, DeviceBean item) {
 
     }
 }

@@ -4,75 +4,23 @@ import java.util.List;
 
 public class ProjectBean {
 
-    /**
-     * code : 200
-     * msg : 查询成功
-     * data : {"ProjectBean":[{"_id":"5bdc418ef4d21d91346961bb","project_name":"周界报警"},{"_id":"5bdc4198f4d21d91346961bc","project_name":"电视维修"},{"_id":"5bdc41a0f4d21d91346961bd","project_name":"高清摄像机"},{"_id":"5bdc41a8f4d21d91346961be","project_name":"ATM机智能分析"}]}
-     */
+    private String _id;
+    private String project_name;
 
-    private int code;
-    private String msg;
-    private DataBean data;
-
-    public int getCode() {
-        return code;
+    public String get_id() {
+        return _id;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getProject_name() {
+        return project_name;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setProject_name(String project_name) {
+        this.project_name = project_name;
     }
 
-    public DataBean getData() {
-        return data;
-    }
-
-    public void setData(DataBean data) {
-        this.data = data;
-    }
-
-    public static class DataBean {
-        private List<ProjectBeanBean> ProjectBean;
-
-        public List<ProjectBeanBean> getProjectBean() {
-            return ProjectBean;
-        }
-
-        public void setProjectBean(List<ProjectBeanBean> ProjectBean) {
-            this.ProjectBean = ProjectBean;
-        }
-
-        public static class ProjectBeanBean {
-            /**
-             * _id : 5bdc418ef4d21d91346961bb
-             * project_name : 周界报警
-             */
-
-            private String _id;
-            private String project_name;
-
-            public String get_id() {
-                return _id;
-            }
-
-            public void set_id(String _id) {
-                this._id = _id;
-            }
-
-            public String getProject_name() {
-                return project_name;
-            }
-
-            public void setProject_name(String project_name) {
-                this.project_name = project_name;
-            }
-        }
-    }
 }

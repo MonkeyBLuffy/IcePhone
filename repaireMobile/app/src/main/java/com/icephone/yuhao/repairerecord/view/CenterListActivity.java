@@ -74,7 +74,7 @@ public class CenterListActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Bundle bundle = new Bundle();
-                bundle.putString(StringConstant.KEY_SEARCH_CENTER_NAME,centerBeanList.get(position).getCenterName());
+                bundle.putString(StringConstant.KEY_SEARCH_CENTER_NAME,centerBeanList.get(position).getCenter_name());
                 bundle.putString(StringConstant.KEY_SEARCH_START_TIME, "");
                 bundle.putString(StringConstant.KEY_SEARCH_END_TIME, "");
                 openActivity(ResultActivity.class, bundle);
@@ -99,8 +99,10 @@ public class CenterListActivity extends BaseActivity {
     @Override
     public void initDate() {
 
-        centerBeanList.add(new CenterBean("1","清苑联社"));
-        centerBeanList.add(new CenterBean("2","满城联社"));
+        // TODO 全部改成网络获取的数据
+
+//        centerBeanList.add(new CenterBean("1","清苑联社"));
+//        centerBeanList.add(new CenterBean("2","满城联社"));
 
         centerAdapter = new CenterAdapter(R.layout.layout_simple_item,centerBeanList);
     }
