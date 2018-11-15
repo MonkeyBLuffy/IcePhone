@@ -12,6 +12,7 @@ import com.icephone.yuhao.repairerecord.view.ManagePeopleActivity;
 import com.icephone.yuhao.repairerecord.view.ManageRepairProActivity;
 import com.icephone.yuhao.repairerecord.view.ManageSiteActivity;
 import com.icephone.yuhao.repairerecord.view.RecordDetailActivity;
+import com.icephone.yuhao.repairerecord.view.SearchInstallActivity;
 import com.icephone.yuhao.repairerecord.view.SearchRecordActivity;
 
 import butterknife.ButterKnife;
@@ -61,6 +62,10 @@ public class MainActivity extends BaseActivity {
         openActivity(ManageFittingAvtivity.class);
     }
 
+    @OnClick(R.id.cv_search_install)
+    void searchInstall() {
+        openActivity(SearchInstallActivity.class);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

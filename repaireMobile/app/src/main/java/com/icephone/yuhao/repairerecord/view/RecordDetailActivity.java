@@ -292,7 +292,7 @@ public class RecordDetailActivity extends BaseActivity {
             }
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
             ApiBuilder builder = new ApiBuilder()
-                    .Url(URLConstant.UPLOAD_REPAIR_RECORD)
+                    .Url(URLConstant.REPAIR_ADD_RECORD)
                     .Body(requestBody);
 
             openActivity(SuccessActivity.class);
