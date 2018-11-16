@@ -12,6 +12,12 @@ import com.icephone.yuhao.repairerecord.Util.DialogUtil;
 import com.icephone.yuhao.repairerecord.Util.StringConstant;
 import com.icephone.yuhao.repairerecord.Util.TimeUtil;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
+import com.icephone.yuhao.repairerecord.bean.CenterBean;
+import com.icephone.yuhao.repairerecord.bean.SiteBean;
+import com.icephone.yuhao.repairerecord.net.ApiBuilder;
+import com.icephone.yuhao.repairerecord.net.ApiClient;
+import com.icephone.yuhao.repairerecord.net.CallBack;
+import com.icephone.yuhao.repairerecord.net.URLConstant;
 
 import java.util.Calendar;
 
@@ -28,11 +34,11 @@ public class SearchRecordActivity extends BaseActivity {
     @BindView(R.id.tv_end_time)
     TextView tvEndTime;
 
+    private String[] centerItem; //联社列表
 
     @OnClick(R.id.rl_center_name)
     void chooseCenterName() {
-        final String[] item = {"清苑联社", "满城联社"};
-        DialogUtil.showSingleChooseDialog(this, "选择联社", item,
+        DialogUtil.showSingleChooseDialog(this, "选择联社", centerItem,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -43,8 +49,8 @@ public class SearchRecordActivity extends BaseActivity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        tvCenterName.setText(item[which]);
-                        centerName = item[which];
+                        tvCenterName.setText(centerItem[which]);
+                        centerName = centerItem[which];
                     }
                 }
 
@@ -92,9 +98,9 @@ public class SearchRecordActivity extends BaseActivity {
     }
 
     private Calendar calendar;
-    private String centerName = "";
-    private String startTime = "";
-    private String endTime = "";
+    private String centerName = StringConstant.NULL_STRING;
+    private String startTime = StringConstant.NULL_STRING;
+    private String endTime = StringConstant.NULL_STRING;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +119,59 @@ public class SearchRecordActivity extends BaseActivity {
 
     @Override
     public void initDate() {
+        getCenterList();
         calendar = Calendar.getInstance();
+    }
+
+    private void getCenterList() {
+
+        ApiBuilder builder = new ApiBuilder().Url(URLConstant.CENTER_GET_LIST);
+        ApiClient.getInstance().doGet(builder, new CallBack<CenterBean>() {
+            @Override
+            public void onResponse(CenterBean data) {
+                if (data.getCode() == URLConstant.SUCCUSS_CODE) {
+                    if (data.getData() != null) {
+                        centerItem = new String[data.getData().size()];
+                        for (int i=0;i< data.getData().size();i++){
+                            centerItem[i] = data.getData().get(i).getCenter_name();
+                        }
+                    }
+                } else {
+                    ToastUtil.showToastShort(SearchRecordActivity.this, "获取联社列表失败");
+                }
+            }
+
+            @Override
+            public void onFail(String msg) {
+                ToastUtil.showToastShort(SearchRecordActivity.this, "获取联社列表失败");
+            }
+        }, CenterBean.class);
+    }
+
+    private String[] siteItem;
+
+    private void getSiteList(String siteProperty) {
+        ApiBuilder builder = new ApiBuilder().Url(URLConstant.SITE_GET_LIST);
+        ApiClient.getInstance().doGet(builder, new CallBack<SiteBean>() {
+            @Override
+            public void onResponse(SiteBean data) {
+                if (data.getCode() == URLConstant.SUCCUSS_CODE) {
+                    if (data.getData() != null) {
+                        siteItem = new String[data.getData().size()];
+                        for (int i=0;i< data.getData().size();i++){
+                            siteItem[i] = data.getData().get(i).getSite_name();
+                        }
+                    }
+                } else {
+                    ToastUtil.showToastShort(SearchRecordActivity.this, "查询失败请重试");
+                }
+            }
+
+            @Override
+            public void onFail(String msg) {
+                ToastUtil.showToastShort(SearchRecordActivity.this, "查询失败请重试");
+            }
+        }, SiteBean.class);
     }
 
 }

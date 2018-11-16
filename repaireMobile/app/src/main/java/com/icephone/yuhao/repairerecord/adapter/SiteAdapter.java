@@ -17,6 +17,7 @@ public class SiteAdapter extends BaseQuickAdapter<SiteBean.DataBean,BaseViewHold
 
     @Override
     protected void convert(BaseViewHolder helper, SiteBean.DataBean item) {
+        helper.setVisible(R.id.iv_forward, false);
         helper.setText(R.id.tv_name, item.getSite_name());
     }
 }

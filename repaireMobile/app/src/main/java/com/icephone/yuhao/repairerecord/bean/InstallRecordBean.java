@@ -1,5 +1,6 @@
 package com.icephone.yuhao.repairerecord.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class InstallRecordBean {
@@ -39,7 +40,7 @@ public class InstallRecordBean {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * _id : 5bdc3edaf4d21d91346961b5
          * time : 20181009
