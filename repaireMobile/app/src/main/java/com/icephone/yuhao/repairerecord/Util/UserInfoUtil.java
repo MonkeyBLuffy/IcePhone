@@ -38,15 +38,15 @@ public class UserInfoUtil {
     }
 
     public static boolean isSuperManager(Context context) {
-        return (int)SharedPerferenceUtils.getParam(context, KEY_USER_LIMIT,"") == LIMIT_SUPER_MANAGER;
+        return (int)SharedPerferenceUtils.getParam(context, KEY_USER_LIMIT,-1) == LIMIT_SUPER_MANAGER;
     }
 
     public static boolean isRepairMan(Context context) {
-        return (int)SharedPerferenceUtils.getParam(context, KEY_USER_LIMIT,"") == LIMIT_REPAIR_MAN;
+        return (int)SharedPerferenceUtils.getParam(context, KEY_USER_LIMIT,-1) == LIMIT_REPAIR_MAN;
     }
 
     public static boolean isCenterManager(Context context) {
-        return (int)SharedPerferenceUtils.getParam(context, KEY_USER_LIMIT,"") == LIMIT_MANAGER;
+        return (int)SharedPerferenceUtils.getParam(context, KEY_USER_LIMIT,-1) == LIMIT_MANAGER;
     }
-    
+
 }

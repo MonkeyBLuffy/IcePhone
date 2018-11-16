@@ -62,6 +62,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //获取上次登录的用户名，并且设置
+        if(!UserInfoUtil.getUserAccount(this).equals("")){
+            mEmailView.setText(UserInfoUtil.getUserAccount(this));
+        }
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override

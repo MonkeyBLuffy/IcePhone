@@ -18,6 +18,7 @@
         android:textSize="@dimen/y30" />
 
     <ImageView
+        android:id="@+id/iv_forward"
         android:layout_width="@dimen/x30"
         android:layout_height="@dimen/y30"
         android:layout_alignParentEnd="true"

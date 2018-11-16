@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.icephone.yuhao.repairerecord.Util.StringConstant;
+import com.icephone.yuhao.repairerecord.Util.ToastUtil;
+import com.icephone.yuhao.repairerecord.Util.UserInfoUtil;
 import com.icephone.yuhao.repairerecord.view.BaseActivity;
 import com.icephone.yuhao.repairerecord.view.CenterListActivity;
 import com.icephone.yuhao.repairerecord.view.InstallRecordDetailActivity;
@@ -22,50 +24,92 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.cv_search_record)
     void searchRecord() {
-        openActivity(SearchRecordActivity.class);
-    }
-
-    @OnClick(R.id.cv_add_record)
-    void addRecord() {
-        Bundle bundle = new Bundle();
-        bundle.putString(StringConstant.KEY_MODE,StringConstant.KEY_ADD_MODE);
-        openActivity(RecordDetailActivity.class,bundle);
-    }
-
-    @OnClick(R.id.cv_manage_center)
-    void manageCenter() {
-        openActivity(CenterListActivity.class);
-    }
-
-    @OnClick(R.id.cv_repair_pro)
-    void repairProject() {
-        openActivity(ManageRepairProActivity.class);
-    }
-
-    @OnClick(R.id.cv_manage_people)
-    void managePeople() {
-        openActivity(ManagePeopleActivity.class);
-    }
-
-    @OnClick(R.id.cv_site_manage)
-    void manageSite() {
-        openActivity(ManageSiteActivity.class);
-    }
-
-    @OnClick(R.id.cv_install)
-    void manageRepairPro() {
-        openActivity(InstallRecordDetailActivity.class);
-    }
-
-    @OnClick(R.id.cv_manage_fitting)
-    void manageFitting() {
-        openActivity(ManageFittingAvtivity.class);
+        if(UserInfoUtil.isCenterManager(this) || UserInfoUtil.isSuperManager(this)){
+            openActivity(SearchRecordActivity.class);
+        }else{
+            ToastUtil.showToastShort(this,"无权进行查看");
+        }
     }
 
     @OnClick(R.id.cv_search_install)
     void searchInstall() {
-        openActivity(SearchInstallActivity.class);
+        if(UserInfoUtil.isCenterManager(this) || UserInfoUtil.isSuperManager(this)){
+            openActivity(SearchInstallActivity.class);
+        }else{
+            ToastUtil.showToastShort(this,"无权进行查看");
+        }
     }
+
+    @OnClick(R.id.cv_add_record)
+    void addRecord() {
+        if(UserInfoUtil.isRepairMan(this) || UserInfoUtil.isSuperManager(this)){
+            Bundle bundle = new Bundle();
+            bundle.putString(StringConstant.KEY_MODE,StringConstant.KEY_ADD_MODE);
+            openActivity(RecordDetailActivity.class,bundle);
+        }else{
+            ToastUtil.showToastShort(this,"无权进行查看");
+        }
+
+    }
+
+    @OnClick(R.id.cv_install)
+    void manageRepairPro() {
+        if(UserInfoUtil.isRepairMan(this) || UserInfoUtil.isSuperManager(this)){
+            Bundle bundle = new Bundle();
+            bundle.putString(StringConstant.KEY_MODE,StringConstant.KEY_ADD_MODE);
+            openActivity(InstallRecordDetailActivity.class,bundle);
+        } else{
+            ToastUtil.showToastShort(this,"无权进行查看");
+        }
+    }
+
+    @OnClick(R.id.cv_manage_center)
+    void manageCenter() {
+        if(UserInfoUtil.isSuperManager(this)){
+            openActivity(CenterListActivity.class);
+        }else {
+            ToastUtil.showToastShort(this,"无权进行查看");
+        }
+    }
+
+    @OnClick(R.id.cv_repair_pro)
+    void repairProject() {
+        if(UserInfoUtil.isSuperManager(this)){
+            openActivity(ManageRepairProActivity.class);
+        }else {
+            ToastUtil.showToastShort(this,"无权进行查看");
+        }
+    }
+
+    @OnClick(R.id.cv_manage_people)
+    void managePeople() {
+        if(UserInfoUtil.isSuperManager(this)){
+            openActivity(ManagePeopleActivity.class);
+        }else {
+            ToastUtil.showToastShort(this,"无权进行查看");
+        }
+    }
+
+    @OnClick(R.id.cv_site_manage)
+    void manageSite() {
+        if(UserInfoUtil.isSuperManager(this)){
+            openActivity(ManageSiteActivity.class);
+
+        }else {
+            ToastUtil.showToastShort(this,"无权进行查看");
+        }
+    }
+
+    @OnClick(R.id.cv_manage_fitting)
+    void manageFitting() {
+        if(UserInfoUtil.isSuperManager(this)){
+            openActivity(ManageFittingAvtivity.class);
+        }else {
+            ToastUtil.showToastShort(this,"无权进行查看");
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

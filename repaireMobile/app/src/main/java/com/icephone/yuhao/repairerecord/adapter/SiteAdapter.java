@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.icephone.yuhao.repairerecord.R;
 import com.icephone.yuhao.repairerecord.bean.SiteBean;
 
 import java.util.List;
@@ -16,6 +17,6 @@ public class SiteAdapter extends BaseQuickAdapter<SiteBean.DataBean,BaseViewHold
 
     @Override
     protected void convert(BaseViewHolder helper, SiteBean.DataBean item) {
-
+        helper.setText(R.id.tv_name, item.getSite_name());
     }
 }
