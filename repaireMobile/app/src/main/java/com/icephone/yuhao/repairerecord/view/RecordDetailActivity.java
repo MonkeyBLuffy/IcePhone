@@ -385,7 +385,7 @@ public class RecordDetailActivity extends BaseActivity {
      * 查看记录，把传过来的数据更新到View
      */
     public void putDataToView() {
-        RepairRecordBean bean = (RepairRecordBean) getIntent().getSerializableExtra(StringConstant.KEY_TRANSFER_RECORD);
+        RepairRecordBean.DataBean bean = (RepairRecordBean.DataBean) getIntent().getSerializableExtra(StringConstant.KEY_TRANSFER_RECORD);
 
         _id = bean.get_id();
 
@@ -407,11 +407,11 @@ public class RecordDetailActivity extends BaseActivity {
         site_person = bean.getSite_person();
         sitePersonView.setText(site_person);
 
-        fix_details = bean.getFix_details();
-        fixDetailsView.setText(fix_details);
-
-        fitting = bean.getFittings();
-        fittingView.setText(fitting);
+//        fix_details = bean.getFix_details();
+//        fixDetailsView.setText(fix_details);
+//
+//        fitting = bean.getFittings();
+//        fittingView.setText(fitting);
 
         setViewUntouchable();
     }

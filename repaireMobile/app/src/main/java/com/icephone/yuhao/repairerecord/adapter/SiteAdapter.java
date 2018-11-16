@@ -8,14 +8,14 @@ import com.icephone.yuhao.repairerecord.bean.SiteBean;
 
 import java.util.List;
 
-public class SiteAdapter extends BaseQuickAdapter<SiteBean,BaseViewHolder> {
+public class SiteAdapter extends BaseQuickAdapter<SiteBean.DataBean,BaseViewHolder> {
 
-    public SiteAdapter(int layoutResId, @Nullable List<SiteBean> data) {
+    public SiteAdapter(int layoutResId, @Nullable List<SiteBean.DataBean> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, SiteBean item) {
+    protected void convert(BaseViewHolder helper, SiteBean.DataBean item) {
 
     }
 }

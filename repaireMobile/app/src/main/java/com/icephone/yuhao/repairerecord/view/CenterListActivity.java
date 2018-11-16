@@ -53,7 +53,7 @@ public class CenterListActivity extends BaseActivity {
     RecyclerView rvCenterList;
 
     private CenterAdapter centerAdapter;
-    private List<CenterBean> centerBeanList = new ArrayList<>();
+    private List<CenterBean.DataBean> centerBeanList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

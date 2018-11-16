@@ -11,7 +11,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.icephone.yuhao.repairerecord.R;
 import com.icephone.yuhao.repairerecord.Util.StringConstant;
 import com.icephone.yuhao.repairerecord.adapter.RepairRecordAdapter;
+import com.icephone.yuhao.repairerecord.bean.GetResultBean;
 import com.icephone.yuhao.repairerecord.bean.RepairRecordBean;
+import com.icephone.yuhao.repairerecord.net.ApiBuilder;
+import com.icephone.yuhao.repairerecord.net.ApiClient;
+import com.icephone.yuhao.repairerecord.net.CallBack;
+import com.icephone.yuhao.repairerecord.net.URLConstant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +36,7 @@ public class ResultActivity extends BaseActivity {
     }
 
     private RepairRecordAdapter recordAdapter;
-    private List<RepairRecordBean> recordBeanList = new ArrayList<>();
+    private List<RepairRecordBean.DataBean> recordBeanList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,28 +74,6 @@ public class ResultActivity extends BaseActivity {
         startTime = getIntent().getStringExtra(StringConstant.KEY_SEARCH_START_TIME);
         endTime = getIntent().getStringExtra(StringConstant.KEY_SEARCH_END_TIME);
         Log.i("查询结果Result", centerName + ":" + startTime + "--" + endTime);
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
-        recordBeanList.add(new RepairRecordBean("1", "20180910", "南王庄分社", "维修电视", "小王", "小张", "清苑联社","差不多修好了","一个扳手"));
 
 
         recordAdapter = new RepairRecordAdapter(R.layout.layout_repaire_item, recordBeanList);

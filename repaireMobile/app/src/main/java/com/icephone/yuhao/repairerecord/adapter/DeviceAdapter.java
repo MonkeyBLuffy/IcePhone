@@ -8,14 +8,14 @@ import com.icephone.yuhao.repairerecord.bean.DeviceBean;
 
 import java.util.List;
 
-public class DeviceAdapter extends BaseQuickAdapter<DeviceBean,BaseViewHolder> {
+public class DeviceAdapter extends BaseQuickAdapter<DeviceBean.DataBean,BaseViewHolder> {
 
-    public DeviceAdapter(int layoutResId, @Nullable List<DeviceBean> data) {
+    public DeviceAdapter(int layoutResId, @Nullable List<DeviceBean.DataBean> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, DeviceBean item) {
+    protected void convert(BaseViewHolder helper, DeviceBean.DataBean item) {
 
     }
 }

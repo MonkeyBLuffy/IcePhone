@@ -8,14 +8,14 @@ import com.icephone.yuhao.repairerecord.bean.InstallRecordBean;
 
 import java.util.List;
 
-public class InstallRecordAdapter extends BaseQuickAdapter<InstallRecordBean,BaseViewHolder> {
+public class InstallRecordAdapter extends BaseQuickAdapter<InstallRecordBean.DataBean,BaseViewHolder> {
 
-    public InstallRecordAdapter(int layoutResId, @Nullable List<InstallRecordBean> data) {
+    public InstallRecordAdapter(int layoutResId, @Nullable List<InstallRecordBean.DataBean> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, InstallRecordBean item) {
+    protected void convert(BaseViewHolder helper, InstallRecordBean.DataBean item) {
 
     }
 }

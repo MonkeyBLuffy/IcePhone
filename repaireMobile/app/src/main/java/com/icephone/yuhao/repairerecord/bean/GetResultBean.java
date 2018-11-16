@@ -2,11 +2,16 @@ package com.icephone.yuhao.repairerecord.bean;
 
 import java.util.List;
 
-public class GetResultBean<T> {
+public class GetResultBean {
+
+
+    /**
+     * code : 200
+     * msg : 查询成功
+     */
 
     private int code;
     private String msg;
-    private List<T> data;
 
     public int getCode() {
         return code;
@@ -22,14 +27,6 @@ public class GetResultBean<T> {
 
     public void setMsg(String msg) {
         this.msg = msg;
-    }
-
-    public List<T> getData() {
-        return data;
-    }
-
-    public void setData(List<T> data) {
-        this.data = data;
     }
 
 }

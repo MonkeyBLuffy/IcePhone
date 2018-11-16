@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,7 +19,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.icephone.yuhao.repairerecord.Util.SharedPerferenceUtils;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
+import com.icephone.yuhao.repairerecord.Util.UserInfoUtil;
+import com.icephone.yuhao.repairerecord.bean.GetResultBean;
+import com.icephone.yuhao.repairerecord.bean.LoginBean;
+import com.icephone.yuhao.repairerecord.bean.RepairRecordBean;
+import com.icephone.yuhao.repairerecord.net.ApiBuilder;
+import com.icephone.yuhao.repairerecord.net.ApiClient;
+import com.icephone.yuhao.repairerecord.net.CallBack;
+import com.icephone.yuhao.repairerecord.net.URLConstant;
 
 /**
  * 设置错误信息：mEmailView.setError(getString(R.string.error_field_required));
@@ -108,9 +118,29 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            ToastUtil.showToastShort(this, email + ":" + password);
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
+            ApiBuilder builder = new ApiBuilder().Url(URLConstant.USER_LOGIN)
+                    .Params("account", email)
+                    .Params("password", password);
+            ApiClient.getInstance().doGet(builder, new CallBack<LoginBean>() {
+                @Override
+                public void onResponse(LoginBean data) {
+                    if (data.getCode()==URLConstant.SUCCUSS_CODE){
+                        ToastUtil.showToastShort(LoginActivity.this,"欢迎使用");
+                        UserInfoUtil.saveUserInfo(getApplicationContext(), data.getData());
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
+                    }else {
+                        ToastUtil.showToastShort(LoginActivity.this,data.getMsg());
+                    }
+
+                }
+
+                @Override
+                public void onFail(String msg) {
+
+                }
+            }, LoginBean.class);
+
         }
     }
 

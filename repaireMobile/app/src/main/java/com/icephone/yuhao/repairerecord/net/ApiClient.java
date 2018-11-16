@@ -1,16 +1,14 @@
 package com.icephone.yuhao.repairerecord.net;
 
-import android.content.Context;
+
 import android.util.Log;
 
 import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import okhttp3.Headers;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,20 +21,20 @@ public class ApiClient {
      * 使用示例
      *
      * ApiBuilder builder = new ApiBuilder(ApiClient.Api_BookInfo)
-            .Headers("header1","this is request header1")
-            .Headers("header2","this is request header2")
-            .Params("params1","this is request params1")
-            .Params("params2","this is request params2");
-       ApiClient.getInstance().doGet(builder, new CallBack<FindContent>() {
-            @Override
-            public void onSuccess(Call<ResponseBody> call, FindContent response) {
-                //Do Something
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
+     .Headers("header1","this is request header1")
+     .Headers("header2","this is request header2")
+     .Params("params1","this is request params1")
+     .Params("params2","this is request params2");
+     ApiClient.getInstance().doGet(builder, new CallBack<FindContent>() {
+    @Override
+    public void onSuccess(Call<ResponseBody> call, FindContent response) {
+    //Do Something
+    }
+    @Override
+    public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-            }
-       },FindContent.class);
+    }
+    },FindContent.class);
 
      */
 
@@ -54,9 +52,9 @@ public class ApiClient {
     /**
      * 获取service实例
      * @return
+     * get或者post请求接口
      */
     public ApiService getService(){
-
         return retrofit.create(ApiService.class);
     }
 
@@ -95,13 +93,15 @@ public class ApiClient {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object o = null;
                 try {
-                    Log.d("kevin", String.valueOf(response));
-                    assert response.body() != null;
-                    o = new Gson().fromJson(response.body().string(), classOf);
+                    if (response.body() == null) {
+                        onCallback.onFail("失败");
+                    }else{
+                        o = new Gson().fromJson(response.body().string(), classOf);
+                        onCallback.onResponse((T) o);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                onCallback.onResponse((T) o);
             }
 
             @Override
@@ -130,12 +130,17 @@ public class ApiClient {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Object o = null;
                 try {
-                    assert response.body() != null;
-                    o = new Gson().fromJson(response.body().string(), classOf);
+                    if (response.body() == null) {
+                        String err = response.errorBody().string();
+                        onCallback.onFail("失败");
+                        Log.i("err", err);
+                    }else{
+                        o = new Gson().fromJson(response.body().string(), classOf);
+                        onCallback.onResponse((T) o);
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                onCallback.onResponse((T) o);
             }
 
             @Override

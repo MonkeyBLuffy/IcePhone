@@ -27,7 +27,7 @@ import butterknife.OnClick;
 
 public class ManagePeopleActivity extends BaseActivity {
 
-    private List<PeopleBean> peopleBeanList = new ArrayList<>();
+    private List<PeopleBean.DataBean> peopleBeanList = new ArrayList<>();
     private PeopleAdapter peopleAdapter ;
 
     @Override
@@ -75,9 +75,6 @@ public class ManagePeopleActivity extends BaseActivity {
 
     @Override
     public void initDate() {
-        peopleBeanList.add(new PeopleBean("1","小张","123","123","管理员","清苑联社"));
-        peopleBeanList.add(new PeopleBean("2","小王","123","123","管理员","清苑联社"));
-        peopleBeanList.add(new PeopleBean("3","小王","123","123","管理员","清苑联社"));
         peopleAdapter = new PeopleAdapter(R.layout.layout_simple_item,peopleBeanList);
     }
 }
