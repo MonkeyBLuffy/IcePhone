@@ -90,15 +90,16 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    @OnClick(R.id.cv_site_manage)
-    void manageSite() {
-        if(UserInfoUtil.isSuperManager(this)){
-            openActivity(ManageSiteActivity.class);
-
-        }else {
-            ToastUtil.showToastShort(this,"无权进行查看");
-        }
-    }
+    //网点管理：改为从联社管理页面进入
+//    @OnClick(R.id.cv_site_manage)
+//    void manageSite() {
+//        if(UserInfoUtil.isSuperManager(this)){
+//            openActivity(ManageSiteActivity.class);
+//
+//        }else {
+//            ToastUtil.showToastShort(this,"无权进行查看");
+//        }
+//    }
 
     @OnClick(R.id.cv_manage_fitting)
     void manageFitting() {

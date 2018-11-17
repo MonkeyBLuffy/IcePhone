@@ -92,7 +92,14 @@ public class CenterListActivity extends BaseActivity {
         View emptyView = getLayoutInflater().inflate(R.layout.layout_empty, (ViewGroup) rvCenterList.getParent(), false);
         centerAdapter.setEmptyView(emptyView);
         //TODO 联社中心的点击事件：点击之后进入网点管理
-
+        centerAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Bundle bundle = new Bundle();
+                bundle.putString(StringConstant.KEY_SEARCH_CENTER_NAME,centerBeanList.get(position).getCenter_name());
+                openActivity(ManageSiteActivity.class,bundle);
+            }
+        });
         //长按删除
         centerAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
             @Override

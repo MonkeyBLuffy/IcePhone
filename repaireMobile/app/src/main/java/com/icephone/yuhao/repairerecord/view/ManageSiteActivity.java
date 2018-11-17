@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -12,6 +13,7 @@ import android.widget.EditText;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.icephone.yuhao.repairerecord.R;
 import com.icephone.yuhao.repairerecord.Util.DialogUtil;
+import com.icephone.yuhao.repairerecord.Util.StringConstant;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
 import com.icephone.yuhao.repairerecord.adapter.AdapterFacory;
 import com.icephone.yuhao.repairerecord.adapter.SiteAdapter;
@@ -34,23 +36,20 @@ public class ManageSiteActivity extends BaseActivity {
 
     @OnClick(R.id.fl_add)
     void add() {
-        View view = View.inflate(this, R.layout.layout_dialog_two_edit, null);
-        final EditText editText1 = view.findViewById(R.id.et_add1);
-        final EditText editText2 = view.findViewById(R.id.et_add2);
+        View view = View.inflate(this, R.layout.layout_dialog_edit, null);
+        final EditText editText1 = view.findViewById(R.id.et_add);
         editText1.setHint("请输入网点名称");
-        editText2.setHint("请输入所属联社名称");
         DialogUtil.showEditTextDialog(this, "添加网点", view, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String newSiteName = editText1.getText() == null ? "" : editText1.getText().toString();
-                String siteProperty = editText2.getText() == null ? "" : editText1.getText().toString();
-                if (newSiteName.equals("") || siteProperty.equals("")) {
+                if (newSiteName.equals("")) {
                     ToastUtil.showToastShort(ManageSiteActivity.this, "请输入");
                 } else {
                     // 网络接口上传
                     ApiBuilder builder = new ApiBuilder().Url(URLConstant.SITE_ADD)
                             .Params("site_name", newSiteName)
-                            .Params("site_property", siteProperty);
+                            .Params("site_property", centerName);
                     ApiClient.getInstance().doGet(builder, new CallBack<GetResultBean>() {
                         @Override
                         public void onResponse(GetResultBean data) {
@@ -79,8 +78,12 @@ public class ManageSiteActivity extends BaseActivity {
     @BindView(R.id.rv_site_list)
     RecyclerView rvSiteList;
 
+    // 列表+adapter
     private List<SiteBean.DataBean> siteList = new ArrayList<>();
     private SiteAdapter siteAdapter;
+
+    // 从前面传回来的centername
+    private String centerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,12 +118,17 @@ public class ManageSiteActivity extends BaseActivity {
 
     @Override
     public void initDate() {
+
+        //获取centerName
+        centerName = getIntent().getStringExtra(StringConstant.KEY_SEARCH_CENTER_NAME);
+        Log.i("center_name:", centerName);
         refreshList();
     }
 
     //获取List
     private void refreshList() {
-        ApiBuilder builder = new ApiBuilder().Url(URLConstant.SITE_GET_LIST);
+        ApiBuilder builder = new ApiBuilder().Url(URLConstant.SITE_GET_LIST)
+                .Params("site_property", centerName);
         ApiClient.getInstance().doGet(builder, new CallBack<SiteBean>() {
             @Override
             public void onResponse(SiteBean data) {
