@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.icephone.yuhao.repairerecord"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -35,6 +35,10 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    // 加载狂
+    implementation 'com.kaopiz:kprogresshud:1.2.0'
+    //Excel工具
+    implementation group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
 
     //butterknife
     implementation 'com.jakewharton:butterknife:8.8.1'

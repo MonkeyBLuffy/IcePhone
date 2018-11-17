@@ -1,5 +1,7 @@
 package com.icephone.yuhao.repairerecord.view;
 
+import android.Manifest;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.icephone.yuhao.repairerecord.R;
+import com.icephone.yuhao.repairerecord.Util.OutputEXLUtil;
 import com.icephone.yuhao.repairerecord.Util.StringConstant;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
 import com.icephone.yuhao.repairerecord.adapter.AdapterFacory;
@@ -21,15 +24,22 @@ import com.icephone.yuhao.repairerecord.net.ApiBuilder;
 import com.icephone.yuhao.repairerecord.net.ApiClient;
 import com.icephone.yuhao.repairerecord.net.CallBack;
 import com.icephone.yuhao.repairerecord.net.URLConstant;
+import com.kaopiz.kprogresshud.KProgressHUD;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class ResultInstallActivity extends BaseActivity {
+public class ResultInstallActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
+
+    private final int READ_WRITE_MEMORY = 0;
+
+    final String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "RecordList";
 
     @BindView(R.id.rv_record_list)
     RecyclerView rvRecordList;
@@ -40,8 +50,10 @@ public class ResultInstallActivity extends BaseActivity {
     }
 
     @OnClick(R.id.tv_output)
-    void outputFile() {
+    void output() {
+        // TODO 导出文件和权限
         ToastUtil.showToastShort(this,"导出文件");
+        requestReadFilePermissions();
     }
 
     private InstallRecordAdapter recordAdapter;
@@ -81,6 +93,49 @@ public class ResultInstallActivity extends BaseActivity {
         refreshList();
     }
 
+    /**
+     * 申请查看相册权限
+     */
+    private void requestReadFilePermissions() {
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}; //读写权限
+        //判断有没有权限读写权限
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            // 如果有权限了
+            //TODO 打开相册
+            Log.i("permission", "打开相册");
+            outputFile();
+        } else {
+            // 如果没有权限, 就去申请权限
+            // this: 上下文
+            // Dialog显示的正文
+            // RC_CAMERA_AND_RECORD_AUDIO 请求码, 用于回调的时候判断是哪次申请
+            // perms 就是你要申请的权限
+            EasyPermissions.requestPermissions(this, "需要读取相册", READ_WRITE_MEMORY, perms);
+        }
+    }
+
+    private void outputFile() {
+
+        File file = new File(path);
+        //文件夹是否已经存在
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        String fileName = file.toString() + "/" + "安装记录.xls";
+
+        //TODO 导出excel文件
+        KProgressHUD dialog = KProgressHUD.create(ResultInstallActivity.this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setDetailsLabel("正在导出文件")
+                .setCancellable(true)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
+        String[] title = {"时间", "联社名称", "网点全称", "网点人员", "安装人员","安装项目","设备明细","安装详情","是否完成","安装费用"};
+        OutputEXLUtil.initExcel(fileName, title);
+        OutputEXLUtil.writeInstallListToExcel(recordBeanList, fileName, ResultInstallActivity.this,dialog);
+    }
+
     private void refreshList() {
         String centerName, startTime, endTime;
         centerName = getIntent().getStringExtra(StringConstant.KEY_SEARCH_CENTER_NAME);
@@ -111,5 +166,25 @@ public class ResultInstallActivity extends BaseActivity {
                 ToastUtil.showToastShort(ResultInstallActivity.this, "查询失败请重试");
             }
         }, InstallRecordBean.class);
+    }
+
+    /**
+     * 权限申请成功回调
+     * @param requestCode
+     * @param perms
+     */
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    /**
+     * 权限申请失败
+     * @param requestCode
+     * @param perms
+     */
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        ToastUtil.showToastShort(this, "拒绝权限");
     }
 }

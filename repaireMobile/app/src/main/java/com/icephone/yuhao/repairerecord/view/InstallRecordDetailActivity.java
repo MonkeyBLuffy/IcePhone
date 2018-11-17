@@ -234,7 +234,7 @@ public class InstallRecordDetailActivity extends BaseActivity {
     @OnClick(R.id.rl_install_complete)
     void chooseReturnFix() {
         final String[] item = {"完成", "未完成"};
-        DialogUtil.showSingleChooseDialog(this, "选择是否返厂", item,
+        DialogUtil.showSingleChooseDialog(this, "选择是否完成", item,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

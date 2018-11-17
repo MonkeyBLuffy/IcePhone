@@ -1,5 +1,6 @@
 package com.icephone.yuhao.repairerecord.view;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import com.icephone.yuhao.repairerecord.net.ApiBuilder;
 import com.icephone.yuhao.repairerecord.net.ApiClient;
 import com.icephone.yuhao.repairerecord.net.CallBack;
 import com.icephone.yuhao.repairerecord.net.URLConstant;
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +29,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class ResultActivity extends BaseActivity {
+public class ResultActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
+
+    private final int READ_WRITE_MEMORY = 0;
 
     @BindView(R.id.rv_record_list)
     RecyclerView rvRecordList;
@@ -39,8 +44,10 @@ public class ResultActivity extends BaseActivity {
     }
 
     @OnClick(R.id.tv_output)
-    void outputFile() {
+    void output() {
+        // TODO 导出文件和权限
         ToastUtil.showToastShort(this,"导出文件");
+        requestReadFilePermissions();
     }
 
     private RepairRecordAdapter recordAdapter;
@@ -58,7 +65,7 @@ public class ResultActivity extends BaseActivity {
     @Override
     public void initView() {
         View emptyView = getLayoutInflater().inflate(R.layout.layout_empty, (ViewGroup) rvRecordList.getParent(), false);
-        recordAdapter = AdapterFacory.getRepairRecordAdater(R.layout.layout_repaire_item,recordBeanList);
+        recordAdapter = AdapterFacory.getRepairRecordAdater(R.layout.layout_repaire_item, recordBeanList);
         recordAdapter.setEmptyView(emptyView);
         recordAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
         recordAdapter.isFirstOnly(false);
@@ -67,8 +74,8 @@ public class ResultActivity extends BaseActivity {
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Bundle bundle = new Bundle();
                 bundle.putString(StringConstant.KEY_MODE, StringConstant.KEY_LOOK_MODE); //点击这个维修项，然后查看详细
-                bundle.putSerializable(StringConstant.KEY_TRANSFER_RECORD,recordBeanList.get(position));
-                openActivity(RecordDetailActivity.class,bundle);
+                bundle.putSerializable(StringConstant.KEY_TRANSFER_RECORD, recordBeanList.get(position));
+                openActivity(RecordDetailActivity.class, bundle);
             }
         });
         rvRecordList.setLayoutManager(new LinearLayoutManager(this));
@@ -78,6 +85,38 @@ public class ResultActivity extends BaseActivity {
     @Override
     public void initDate() {
         refreshList();
+    }
+
+    /**
+     * 申请查看相册权限
+     */
+    private void requestReadFilePermissions() {
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}; //读写权限
+        //判断有没有权限读写权限
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            // 如果有权限了
+            //TODO 打开相册
+            Log.i("permission", "打开相册");
+            outputFile();
+        } else {
+            // 如果没有权限, 就去申请权限
+            // this: 上下文
+            // Dialog显示的正文
+            // RC_CAMERA_AND_RECORD_AUDIO 请求码, 用于回调的时候判断是哪次申请
+            // perms 就是你要申请的权限
+            EasyPermissions.requestPermissions(this, "需要读取相册", READ_WRITE_MEMORY, perms);
+        }
+    }
+
+    private void outputFile() {
+        KProgressHUD dialog = KProgressHUD.create(ResultActivity.this)
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setDetailsLabel("正在导出文件")
+                .setCancellable(true)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
+        dialog.show();
+        String[] title = {"时间", "联社名称", "网点全称", "网点人员", "维修人员","维修项目","更换设备明细","维修详细","是否返厂维修","维修费","返厂返回时间"};
     }
 
     //查询列表
@@ -113,4 +152,13 @@ public class ResultActivity extends BaseActivity {
         }, RepairRecordBean.class);
     }
 
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+
+    }
 }
