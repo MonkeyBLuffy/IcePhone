@@ -54,7 +54,7 @@ public class PeopleBean {
         private String nick_name;
         private String account;
         private String password;
-        private int limit;
+        private String limit;
         private String manage_center;
 
         public String get_id() {
@@ -89,11 +89,11 @@ public class PeopleBean {
             this.password = password;
         }
 
-        public int getLimit() {
+        public String getLimit() {
             return limit;
         }
 
-        public void setLimit(int limit) {
+        public void setLimit(String limit) {
             this.limit = limit;
         }
 

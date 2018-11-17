@@ -74,8 +74,8 @@ public class ManagePeopleActivity extends BaseActivity {
                 // 需要传递各种数据
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(StringConstant.KEY_TRANSFER_PEOPLE,peopleBeanList.get(position));
-                bundle.putSerializable(StringConstant.KEY_PEOPLE_MODE, StringConstant.KEY_LOOK_PEOPLE);
-                openActivity(PeopleDetailActivity.class);
+                bundle.putSerializable(StringConstant.KEY_MODE, StringConstant.KEY_LOOK_PEOPLE);
+                openActivity(PeopleDetailActivity.class,bundle);
             }
         });
 

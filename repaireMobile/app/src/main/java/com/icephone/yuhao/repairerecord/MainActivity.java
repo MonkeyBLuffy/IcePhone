@@ -22,6 +22,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
 
+    //查找维修记录
     @OnClick(R.id.cv_search_record)
     void searchRecord() {
         if(UserInfoUtil.isCenterManager(this) || UserInfoUtil.isSuperManager(this)){
@@ -31,6 +32,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    //查找安装记录
     @OnClick(R.id.cv_search_install)
     void searchInstall() {
         if(UserInfoUtil.isCenterManager(this) || UserInfoUtil.isSuperManager(this)){
@@ -40,6 +42,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    //上传维修记录
     @OnClick(R.id.cv_add_record)
     void addRecord() {
         if(UserInfoUtil.isRepairMan(this) || UserInfoUtil.isSuperManager(this)){
@@ -52,6 +55,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    //上传安装记录
     @OnClick(R.id.cv_install)
     void manageRepairPro() {
         if(UserInfoUtil.isRepairMan(this) || UserInfoUtil.isSuperManager(this)){
@@ -63,6 +67,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    //联社管理
     @OnClick(R.id.cv_manage_center)
     void manageCenter() {
         if(UserInfoUtil.isSuperManager(this)){
@@ -72,6 +77,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    //维修项目管理
     @OnClick(R.id.cv_repair_pro)
     void repairProject() {
         if(UserInfoUtil.isSuperManager(this)){
@@ -81,6 +87,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    //人员管理
     @OnClick(R.id.cv_manage_people)
     void managePeople() {
         if(UserInfoUtil.isSuperManager(this)){
@@ -101,6 +108,7 @@ public class MainActivity extends BaseActivity {
 //        }
 //    }
 
+    //设备管理
     @OnClick(R.id.cv_manage_fitting)
     void manageFitting() {
         if(UserInfoUtil.isSuperManager(this)){

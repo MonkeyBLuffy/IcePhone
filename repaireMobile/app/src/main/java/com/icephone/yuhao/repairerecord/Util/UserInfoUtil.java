@@ -13,9 +13,9 @@ public class UserInfoUtil {
     private final static String KEY_USER_LIMIT = "limit";
     private final static String KEY_MANAGE_CENTER = "center";
 
-    private final static int LIMIT_SUPER_MANAGER = 0;
-    private final static int LIMIT_MANAGER = 1;
-    private final static int LIMIT_REPAIR_MAN = 2;
+    public final static String LIMIT_SUPER_MANAGER = "总管理员";
+    public final static String LIMIT_MANAGER = "联社管理员";
+    public final static String LIMIT_REPAIR_MAN = "维修人员";
 
     public static void saveUserInfo(Context context, LoginBean.DataBean bean) {
         SharedPerferenceUtils.setParam(context, KEY_USER_ID, bean.get_id());
@@ -37,16 +37,34 @@ public class UserInfoUtil {
         return (String) SharedPerferenceUtils.getParam(context, KEY_MANAGE_CENTER, "");
     }
 
+    /**
+     * 判断是不是超级管理员
+     * @param context
+     * @return
+     */
     public static boolean isSuperManager(Context context) {
-        return (int)SharedPerferenceUtils.getParam(context, KEY_USER_LIMIT,-1) == LIMIT_SUPER_MANAGER;
+        String limit = (String) SharedPerferenceUtils.getParam(context, KEY_USER_LIMIT, "");
+        return limit.equals(LIMIT_SUPER_MANAGER) ;
     }
 
+    /**
+     * 判断是不是维修人员
+     * @param context
+     * @return
+     */
     public static boolean isRepairMan(Context context) {
-        return (int)SharedPerferenceUtils.getParam(context, KEY_USER_LIMIT,-1) == LIMIT_REPAIR_MAN;
+        String limit = (String) SharedPerferenceUtils.getParam(context, KEY_USER_LIMIT, "");
+        return limit.equals(LIMIT_REPAIR_MAN) ;
     }
 
+    /**
+     * 判断是不是联社管理员
+     * @param context
+     * @return
+     */
     public static boolean isCenterManager(Context context) {
-        return (int)SharedPerferenceUtils.getParam(context, KEY_USER_LIMIT,-1) == LIMIT_MANAGER;
+        String limit = (String) SharedPerferenceUtils.getParam(context, KEY_USER_LIMIT, "");
+        return limit.equals(LIMIT_MANAGER) ;
     }
 
 }
