@@ -3,6 +3,7 @@ package com.icephone.yuhao.repairerecord.view;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.icephone.yuhao.repairerecord.MainActivity;
 import com.icephone.yuhao.repairerecord.R;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
 
@@ -13,7 +14,7 @@ public class SuccessActivity extends BaseActivity {
 
     @OnClick(R.id.rl_back)
     void back() {
-        onBackPressed();
+        openActivity(MainActivity.class);
     }
 
     @Override

@@ -235,7 +235,7 @@
                         android:textSize="@dimen/y26" />
 
                     <RelativeLayout
-                        android:id="@+id/rl_repair_person"
+                        android:id="@+id/rl_install_person"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/y90"
                         android:layout_marginTop="@dimen/y20"
@@ -243,7 +243,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tv_repair_person"
+                            android:id="@+id/tv_install_person"
                             android:layout_width="@dimen/x530"
                             android:layout_height="@dimen/y200"
                             android:layout_centerVertical="true"
@@ -274,7 +274,7 @@
                         android:textSize="@dimen/y26" />
 
                     <RelativeLayout
-                        android:id="@+id/rl_repair_pro"
+                        android:id="@+id/rl_install_pro"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/y90"
                         android:layout_marginTop="@dimen/y20"
@@ -282,7 +282,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tv_repair_pro"
+                            android:id="@+id/tv_install_pro"
                             android:layout_width="@dimen/x530"
                             android:layout_height="@dimen/y200"
                             android:layout_centerVertical="true"
@@ -313,7 +313,7 @@
                         android:textSize="@dimen/y26" />
 
                     <RelativeLayout
-                        android:id="@+id/rl_fitting"
+                        android:id="@+id/rl_install_device"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/y90"
                         android:layout_marginTop="@dimen/y20"
@@ -321,7 +321,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tv_fitting"
+                            android:id="@+id/tv_install_device"
                             android:layout_width="@dimen/x530"
                             android:layout_height="@dimen/y200"
                             android:layout_centerVertical="true"
@@ -352,7 +352,7 @@
                         android:textSize="@dimen/y26" />
 
                     <EditText
-                        android:id="@+id/et_fix_details"
+                        android:id="@+id/et_install_state"
                         android:textSize="@dimen/y28"
                         android:hint="请输入维修详情"
                         android:layout_width="match_parent"
@@ -370,7 +370,7 @@
                         android:textSize="@dimen/y26" />
 
                     <RelativeLayout
-                        android:id="@+id/rl_finish"
+                        android:id="@+id/rl_install_complete"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/y90"
                         android:layout_marginTop="@dimen/y20"
@@ -378,7 +378,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tv_finish"
+                            android:id="@+id/tv_install_complete"
                             android:layout_width="@dimen/x530"
                             android:layout_height="@dimen/y200"
                             android:layout_centerVertical="true"
@@ -405,13 +405,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/y20"
-                        android:text="费用统计：（管理员填写）"
+                        android:text="费用统计：（元）"
                         android:textSize="@dimen/y26" />
 
                     <EditText
-                        android:id="@+id/et_cost"
+                        android:id="@+id/et_install_cost"
                         android:textSize="@dimen/y28"
                         android:hint="请输入费用"
+                        android:inputType="number"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/y90"
                         android:layout_marginTop="@dimen/y20"

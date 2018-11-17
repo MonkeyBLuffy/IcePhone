@@ -51,7 +51,7 @@ public class InstallRecordBean {
          * install_pro : 电视监控
          * device : 摄像机
          * install_state : 摄像机无图像，保修期内进行更换
-         * install_complete : 0
+         * install_complete : 完成
          * install_cost : 100元
          */
 
@@ -64,7 +64,7 @@ public class InstallRecordBean {
         private String install_pro;
         private String device;
         private String install_state;
-        private int install_complete;
+        private String install_complete;
         private String install_cost;
 
         public String get_id() {
@@ -139,11 +139,11 @@ public class InstallRecordBean {
             this.install_state = install_state;
         }
 
-        public int getInstall_complete() {
+        public String getInstall_complete() {
             return install_complete;
         }
 
-        public void setInstall_complete(int install_complete) {
+        public void setInstall_complete(String install_complete) {
             this.install_complete = install_complete;
         }
 

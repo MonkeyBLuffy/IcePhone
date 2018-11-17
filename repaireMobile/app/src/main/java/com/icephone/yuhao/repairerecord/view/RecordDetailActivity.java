@@ -22,8 +22,17 @@ import com.icephone.yuhao.repairerecord.Util.StringConstant;
 import com.icephone.yuhao.repairerecord.Util.StringFormatUtil;
 import com.icephone.yuhao.repairerecord.Util.TimeUtil;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
+import com.icephone.yuhao.repairerecord.Util.UserInfoUtil;
+import com.icephone.yuhao.repairerecord.bean.CenterBean;
+import com.icephone.yuhao.repairerecord.bean.DeviceBean;
+import com.icephone.yuhao.repairerecord.bean.GetResultBean;
+import com.icephone.yuhao.repairerecord.bean.PeopleBean;
+import com.icephone.yuhao.repairerecord.bean.ProjectBean;
 import com.icephone.yuhao.repairerecord.bean.RepairRecordBean;
+import com.icephone.yuhao.repairerecord.bean.SiteBean;
 import com.icephone.yuhao.repairerecord.net.ApiBuilder;
+import com.icephone.yuhao.repairerecord.net.ApiClient;
+import com.icephone.yuhao.repairerecord.net.CallBack;
 import com.icephone.yuhao.repairerecord.net.URLConstant;
 
 import org.json.JSONException;
@@ -51,15 +60,11 @@ public class RecordDetailActivity extends BaseActivity {
     private String repair_person = "";
     private String site_person = "";
     private String center_name = "";
-    private String fix_details = "";
-    private String fitting = "";
-    private String returnFix = "";
-    private String returnTime = "";
-
-
-    private String[] item = {"监控", "报警", "其他"};
-    private boolean[] itemIsChecked = {false, false, false};
-    final List<String> chooseResult = new ArrayList<>();
+    private String device = "";
+    private String fix_state = "";
+    private String fix_cost = "";
+    private String return_fix = "";
+    private String return_time = "未填写";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,44 +85,45 @@ public class RecordDetailActivity extends BaseActivity {
     Button btSubmit;
 
     @BindView(R.id.tv_time) //时间（选择）
-    TextView timeView;
+            TextView timeView;
     @BindView(R.id.tv_site_name) //网点名称（单选）
-    TextView siteNameView;
+            TextView siteNameView;
     @BindView(R.id.tv_repair_pro) //维修项目（多选）
-    TextView repairProView;
+            TextView repairProView;
     @BindView(R.id.tv_repair_person) //维修人员（多选）
-    TextView repairPersonView;
+            TextView repairPersonView;
     @BindView(R.id.tv_center_name) //联社名称（单选）
-    TextView centerNameView;
-    @BindView(R.id.et_fix_details) //维修详情（填写）
-    TextView fixDetailsView;
-    @BindView(R.id.tv_fitting) //设备明细（多选）
-    TextView fittingView;
+            TextView centerNameView;
+    @BindView(R.id.et_fix_state) //维修详情（填写）
+            TextView fixStateView;
+    @BindView(R.id.tv_device) //设备明细（多选）
+            TextView deviceView;
     @BindView(R.id.et_site_person) //网点人员（填写）
-    EditText sitePersonView;
+            EditText sitePersonView;
     @BindView(R.id.tv_return_time) //返厂时间（选择）
-    TextView returnTimeView;
+            TextView returnTimeView;
     @BindView(R.id.tv_return_fix) //是否返厂维修（选择）
-    TextView returnFixView;
+            TextView returnFixView;
     @BindView(R.id.et_cost) //花费（管理员填写）
-    EditText costView;
+            EditText costView;
 
-    @BindView(R.id.ll_time)
-    LinearLayout llTime;
-    @BindView(R.id.rl_center_name)
-    RelativeLayout rlCenterName;
-    @BindView(R.id.rl_site_name)
-    RelativeLayout rlSiteName;
-    @BindView(R.id.rl_repair_pro)
-    RelativeLayout rlRepairPro;
-    @BindView(R.id.rl_repair_person)
-    RelativeLayout rlRepairPerson;
-    @BindView(R.id.rl_return_time)
-    RelativeLayout rlReturnTime;
-    @BindView(R.id.rl_return_fix)
-    RelativeLayout rlReturnFix;
-    @BindView(R.id.rl_fitting)
-    RelativeLayout rlFitting;
+    //需要选择的一些选项
+    @BindView(R.id.ll_time) //维修时间
+            LinearLayout llTime;
+    @BindView(R.id.rl_center_name) //联社中心
+            RelativeLayout rlCenterName;
+    @BindView(R.id.rl_site_name) //网点中心
+            RelativeLayout rlSiteName;
+    @BindView(R.id.rl_repair_pro) // 维修项目
+            RelativeLayout rlRepairPro;
+    @BindView(R.id.rl_repair_person) // 维修人员
+            RelativeLayout rlRepairPerson;
+    @BindView(R.id.rl_return_time) // 返厂时间（需要管理员填写）
+            RelativeLayout rlReturnTime;
+    @BindView(R.id.rl_return_fix) //是否返厂维修
+            RelativeLayout rlReturnFix;
+    @BindView(R.id.rl_device) //选择设备
+            RelativeLayout rlDevice;
 
     @OnClick(R.id.ll_time)
     void showTimeDialog() {
@@ -127,114 +133,136 @@ public class RecordDetailActivity extends BaseActivity {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 calendar.set(year, month, dayOfMonth);
                 timeView.setText(TimeUtil.getShowTime(calendar));
-                time = TimeUtil.getUploadTime(calendar);
+                time = TimeUtil.getUploadTime(calendar); //时间
             }
         });
     }
 
     @OnClick(R.id.rl_center_name)
     void chooseCenterName() {
-        final String[] item = {"清苑联社", "满城联社"};
-        DialogUtil.showSingleChooseDialog(this, "选择联社", item,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                },
-                new DialogInterface.OnClickListener() {
+        if (centerItem == null) {
+            getCenterList();
+        } else {
+            DialogUtil.showSingleChooseDialog(this, "选择联社", centerItem,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    },
+                    new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        center_name = item[which];
-                        centerNameView.setText(item[which]);
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            center_name = centerItem[which];
+                            centerNameView.setText(centerItem[which]);
+                            getSiteList(center_name);
+                        }
                     }
-                }
-        );
+            );
+        }
     }
 
     @OnClick(R.id.rl_site_name)
     void chooseSiteName() {
-        final String[] item = {"营业部", "南王庄分社", "A分社", "B分社"};
-        DialogUtil.showSingleChooseDialog(this, "选择联社", item,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+        if (siteItem == null) {
+            ToastUtil.showToastShort(RecordDetailActivity.this, "请先选择联社");
+        } else {
+            DialogUtil.showSingleChooseDialog(this, "选择网点", siteItem,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    },
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            site_name = siteItem[which];
+                            siteNameView.setText(siteItem[which]);
+                        }
                     }
-                },
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        site_name = item[which];
-                        siteNameView.setText(item[which]);
-                    }
-                }
-        );
+            );
+        }
+
     }
 
     @OnClick(R.id.rl_repair_pro)
     void chooseRepairPro() {
-        // TODO 多选
-        DialogUtil.showMultiChooseDialog(this, "选择维修项目", item, itemIsChecked,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        repair_pro = StringFormatUtil.ListToString(chooseResult);
-                        repairProView.setText(repair_pro.equals("") ? "请选择维修人员" : repair_pro);
-                        dialog.dismiss();
-                    }
-                }, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        itemIsChecked[which] = isChecked;
-                        if (isChecked) {
-                            chooseResult.add(item[which]);
-                        } else {
-                            chooseResult.remove(item[which]);
+        // 维修项目——多选
+        if (projectItem == null) {
+            getProject();
+        } else {
+            DialogUtil.showMultiChooseDialog(this, "选择维修项目", projectItem, projectItemIsChecked,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            repair_pro = StringFormatUtil.ListToString(chooseProjectResult);
+                            repairProView.setText(repair_pro.equals("") ? "请选择维修项目" : repair_pro);
+                            dialog.dismiss();
                         }
-                    }
-                });
+                    }, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            projectItemIsChecked[which] = isChecked;
+                            if (isChecked) {
+                                chooseProjectResult.add(projectItem[which]);
+                            } else {
+                                chooseProjectResult.remove(projectItem[which]);
+                            }
+                        }
+                    });
+        }
     }
 
     @OnClick(R.id.rl_repair_person)
     void chooseRepairPerson() {
-        final String[] item = {"小王", "小李", "小张", "小孙"};
-        DialogUtil.showSingleChooseDialog(this, "选择联社", item,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                },
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        repair_person = item[which];
-                        repairPersonView.setText(item[which]);
-                    }
-                }
-        );
+        //维修人员——多选
+        if (repairManItem == null) {
+            getRepairMan();
+        } else {
+            DialogUtil.showMultiChooseDialog(this, "选择维修人员", repairManItem, repairManItemIsChecked,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            repair_person = StringFormatUtil.ListToString(chooseRepairManResult);
+                            repairPersonView.setText(repair_person.equals("") ? "请选择维修人员" : repair_person);
+                            dialog.dismiss();
+                        }
+                    }, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            repairManItemIsChecked[which] = isChecked;
+                            if (isChecked) {
+                                chooseRepairManResult.add(repairManItem[which]);
+                            } else {
+                                chooseRepairManResult.remove(repairManItem[which]);
+                            }
+                        }
+                    });
+        }
     }
 
     @OnClick(R.id.rl_return_time)
     void chooseReturnTime() {
-        DialogUtil.showDateDialog(this, calendar, new DatePickerDialog.OnDateSetListener() {
+        if (UserInfoUtil.isSuperManager(getApplicationContext())) {
+            DialogUtil.showDateDialog(this, calendar, new DatePickerDialog.OnDateSetListener() {
 
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(year, month, dayOfMonth);
-                returnTimeView.setText(TimeUtil.getShowTime(calendar));
-                //TODO 添加变量
-//                time = TimeUtil.getUploadTime(calendar);
-            }
-        });
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    calendar.set(year, month, dayOfMonth);
+                    returnTimeView.setText(TimeUtil.getShowTime(calendar));
+                    return_time = TimeUtil.getUploadTime(calendar);
+                }
+            });
+        } else {
+            ToastUtil.showToastShort(RecordDetailActivity.this, "只能由管理员填写");
+        }
     }
 
     @OnClick(R.id.rl_return_fix)
     void chooseReturnFix() {
-        final String[] item = {"未返厂维修","返厂维修"};
+        final String[] item = {"未返厂维修", "返厂维修"};
         DialogUtil.showSingleChooseDialog(this, "选择是否返厂", item,
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -246,21 +274,45 @@ public class RecordDetailActivity extends BaseActivity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO 添加变量哦
-                        returnFixView.setText(item[which]);
+                        return_fix = item[which];
+                        returnFixView.setText(return_fix);
                     }
                 }
         );
     }
 
-    @OnClick(R.id.rl_fitting)
-    void chooseFitting() {
-        // TODO 选择配件，多选
+    @OnClick(R.id.rl_device)
+    void chooseDevice() {
+        // 设备——多选
+        DialogUtil.showMultiChooseDialog(this, "选择设备", deviceItem, deviceItemIsChecked,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        device = StringFormatUtil.ListToString(chooseDeviceResult);
+                        deviceView.setText(device.equals("") ? "请选择设备" : device);
+                        dialog.dismiss();
+                    }
+                }, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        deviceItemIsChecked[which] = isChecked;
+                        if (isChecked) {
+                            chooseDeviceResult.add(deviceItem[which]);
+                        } else {
+                            chooseDeviceResult.remove(deviceItem[which]);
+                        }
+                    }
+                });
     }
 
     @OnClick(R.id.iv_delete)
-    void deleteRecord() {
-        ToastUtil.showToastShort(this, "删除");
+    void delete() {
+        DialogUtil.showAlertDialog(RecordDetailActivity.this, "确定删除吗", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteRecord();
+            }
+        },null);
     }
 
     @OnClick(R.id.iv_edit)
@@ -275,27 +327,47 @@ public class RecordDetailActivity extends BaseActivity {
         if (isTextNull()) {
             //TODO 上传操作
             JSONObject jsonObject = new JSONObject();
+            String url = URLConstant.REPAIR_ADD_RECORD;
             try {
                 if (!_id.equals("")) {
                     jsonObject.put("_id", _id);
+                    url = URLConstant.REPAIR_CHANGE_RECORD;
                 }
                 jsonObject.put("time", time);
-                jsonObject.put("center_name", center_name);
                 jsonObject.put("site_name", site_name);
-                jsonObject.put("site_person", site_person);
                 jsonObject.put("repair_pro", repair_pro);
                 jsonObject.put("repair_person", repair_person);
-                jsonObject.put("fix_details", fix_details);
-                jsonObject.put("fitting", fitting);
+                jsonObject.put("site_person", site_person);
+                jsonObject.put("center_name", center_name);
+                jsonObject.put("device", device);
+                jsonObject.put("fix_state", fix_state);
+                jsonObject.put("return_fix", return_fix);
+                jsonObject.put("fix_cost", fix_cost);
+                jsonObject.put("return_time", return_time);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
             ApiBuilder builder = new ApiBuilder()
-                    .Url(URLConstant.REPAIR_ADD_RECORD)
+                    .Url(url)
                     .Body(requestBody);
+            Log.i("上传测试", jsonObject.toString());
+            ApiClient.getInstance().doPost(builder, new CallBack<GetResultBean>() {
+                @Override
+                public void onResponse(GetResultBean data) {
+                    if (data.getCode() == URLConstant.SUCCUSS_CODE) {
+                        openActivity(SuccessActivity.class);
+                        finish();
+                    } else {
+                        ToastUtil.showToastShort(RecordDetailActivity.this, "请重试");
+                    }
+                }
 
-            openActivity(SuccessActivity.class);
+                @Override
+                public void onFail(String msg) {
+                    ToastUtil.showToastShort(RecordDetailActivity.this, "请重试");
+                }
+            }, GetResultBean.class);
             finish();
         }
     }
@@ -332,12 +404,15 @@ public class RecordDetailActivity extends BaseActivity {
 
     @Override
     public void initDate() {
-
+        getCenterList();
+        getDeviceList();
+        getProject();
+        getRepairMan();
     }
 
     private boolean isTextNull() {
         if (time.equals("")) {
-            ToastUtil.showToastShort(this, "请填写时间");
+            ToastUtil.showToastShort(this, "请选择时间");
             return false;
         }
         if (center_name.equals("")) {
@@ -360,14 +435,22 @@ public class RecordDetailActivity extends BaseActivity {
             ToastUtil.showToastShort(this, "请选择维修项目");
             return false;
         }
-        fix_details = fixDetailsView.getText() == null ? "" : fixDetailsView.getText().toString();
-        if (fix_details.equals("")) {
+        if (device.equals("")) {
+            ToastUtil.showToastShort(this, "请选择设备明细");
+            return false;
+        }
+        fix_state = fixStateView.getText() == null ? "" : fixStateView.getText().toString();
+        if (fix_state.equals("")) {
             ToastUtil.showToastShort(this, "请填写维修详情");
             return false;
         }
-        fitting = fittingView.getText() == null ? "" : fittingView.getText().toString();
-        if (fitting.equals("")) {
-            ToastUtil.showToastShort(this, "请填写配件清单");
+        if (return_fix.equals("")) {
+            ToastUtil.showToastShort(this, "请选择是否返厂维修");
+            return false;
+        }
+        fix_cost = costView.getText() == null ? "" : costView.getText().toString();
+        if (fix_cost.equals("")) {
+            ToastUtil.showToastShort(this, "请填写维修费用");
             return false;
         }
         return true;
@@ -392,26 +475,35 @@ public class RecordDetailActivity extends BaseActivity {
         time = bean.getTime();
         timeView.setText(TimeUtil.transferTimeToShow(time));
 
-        center_name = bean.getCenter_name();
-        centerNameView.setText(center_name);
-
         site_name = bean.getSite_name();
         siteNameView.setText(site_name);
 
-        repair_person = bean.getRepair_person();
-        repairPersonView.setText(repair_person);
+        center_name = bean.getCenter_name();
+        centerNameView.setText(center_name);
 
         repair_pro = bean.getRepair_pro();
         repairProView.setText(repair_pro);
 
+        repair_person = bean.getRepair_person();
+        repairPersonView.setText(repair_person);
+
         site_person = bean.getSite_person();
         sitePersonView.setText(site_person);
 
-//        fix_details = bean.getFix_details();
-//        fixDetailsView.setText(fix_details);
-//
-//        fitting = bean.getFittings();
-//        fittingView.setText(fitting);
+        device = bean.getDevice();
+        deviceView.setText(device);
+
+        fix_state = bean.getFix_state();
+        fixStateView.setText(fix_state);
+
+        fix_cost = bean.getFix_cost();
+        costView.setText(fix_cost);
+
+        return_fix = bean.getReturn_fix();
+        returnFixView.setText(return_fix);
+
+        return_time = bean.getReturn_time();
+        returnTimeView.setText(return_time);
 
         setViewUntouchable();
     }
@@ -422,13 +514,16 @@ public class RecordDetailActivity extends BaseActivity {
     public void setViewUntouchable() {
         llTime.setEnabled(false);
         rlCenterName.setEnabled(false);
-        rlSiteName.setFocusable(false);
-        rlRepairPro.setFocusable(false);
-        rlRepairPerson.setFocusable(false);
+        rlSiteName.setEnabled(false);
+        rlRepairPro.setEnabled(false);
+        rlRepairPerson.setEnabled(false);
+        rlReturnTime.setEnabled(false);
+        rlReturnFix.setEnabled(false);
+        rlDevice.setEnabled(false);
 
-        fittingView.setFocusable(false);
         sitePersonView.setFocusable(false);
-        fixDetailsView.setFocusable(false);
+        fixStateView.setFocusable(false);
+        costView.setFocusable(false);
     }
 
     /**
@@ -438,18 +533,202 @@ public class RecordDetailActivity extends BaseActivity {
 
         llTime.setEnabled(true);
         rlCenterName.setEnabled(true);
-        rlSiteName.setFocusable(true);
-        rlRepairPro.setFocusable(true);
-        rlRepairPerson.setFocusable(true);
+        rlSiteName.setEnabled(true);
+        rlRepairPro.setEnabled(true);
+        rlRepairPerson.setEnabled(true);
+        rlReturnTime.setEnabled(true);
+        rlReturnFix.setEnabled(true);
+        rlDevice.setEnabled(true);
 
-        fittingView.setFocusable(true);
-        fittingView.setFocusableInTouchMode(true);
+        costView.setFocusable(true);
+        costView.setFocusableInTouchMode(true);
         sitePersonView.setFocusable(true);
         sitePersonView.setFocusableInTouchMode(true);
-        fixDetailsView.setFocusable(true);
-        fixDetailsView.setFocusableInTouchMode(true);
+        fixStateView.setFocusable(true);
+        fixStateView.setFocusableInTouchMode(true);
 
         btSubmit.setVisibility(View.VISIBLE);
+    }
+
+    private void deleteRecord() {
+        ApiBuilder builder = new ApiBuilder().Url(URLConstant.REPAIR_DELETE_RECORD)
+                .Params("_id", _id);
+        ApiClient.getInstance().doGet(builder, new CallBack<GetResultBean>() {
+            @Override
+            public void onResponse(GetResultBean data) {
+                if (data.getCode() == URLConstant.SUCCUSS_CODE) {
+                    openActivityAndCleanUp(SuccessActivity.class);
+                } else {
+                    ToastUtil.showToastShort(RecordDetailActivity.this, "请重试");
+                }
+            }
+
+            @Override
+            public void onFail(String msg) {
+                ToastUtil.showToastShort(RecordDetailActivity.this, msg + "请重试");
+            }
+        }, GetResultBean.class);
+    }
+
+    /**
+     * 获取联社列表
+     */
+    private String[] centerItem;
+
+    private void getCenterList() {
+        ApiBuilder builder = new ApiBuilder().Url(URLConstant.CENTER_GET_LIST);
+        ApiClient.getInstance().doGet(builder, new CallBack<CenterBean>() {
+            @Override
+            public void onResponse(CenterBean data) {
+                if (data.getCode() == URLConstant.SUCCUSS_CODE) {
+                    if (data.getData() != null) {
+                        centerItem = new String[data.getData().size()];
+                        for (int i = 0; i < data.getData().size(); i++) {
+                            centerItem[i] = data.getData().get(i).getCenter_name();
+                        }
+                    }
+                } else {
+                    ToastUtil.showToastShort(RecordDetailActivity.this, "获取联社列表失败");
+                }
+            }
+
+            @Override
+            public void onFail(String msg) {
+                ToastUtil.showToastShort(RecordDetailActivity.this, "获取联社列表失败");
+            }
+        }, CenterBean.class);
+    }
+
+    /**
+     * 获取网点列表
+     *
+     * @param siteProperty
+     */
+    private String[] siteItem;
+
+    private void getSiteList(String siteProperty) {
+        ApiBuilder builder = new ApiBuilder().Url(URLConstant.SITE_GET_LIST)
+                .Params("site_property", siteProperty);
+        ApiClient.getInstance().doGet(builder, new CallBack<SiteBean>() {
+            @Override
+            public void onResponse(SiteBean data) {
+                if (data.getCode() == URLConstant.SUCCUSS_CODE) {
+                    if (data.getData() != null) {
+                        siteItem = new String[data.getData().size()];
+                        for (int i = 0; i < data.getData().size(); i++) {
+                            siteItem[i] = data.getData().get(i).getSite_name();
+                        }
+                    }
+                } else {
+                    ToastUtil.showToastShort(RecordDetailActivity.this, "查询失败请重试");
+                }
+            }
+
+            @Override
+            public void onFail(String msg) {
+                ToastUtil.showToastShort(RecordDetailActivity.this, "查询失败请重试");
+            }
+        }, SiteBean.class);
+    }
+
+    /**
+     * 获取设备列表
+     */
+    private String[] deviceItem;
+    private boolean[] deviceItemIsChecked;
+    final List<String> chooseDeviceResult = new ArrayList<>();
+
+    private void getDeviceList() {
+        ApiBuilder builder = new ApiBuilder().Url(URLConstant.DEVICE_GET_LIST);
+        ApiClient.getInstance().doGet(builder, new CallBack<DeviceBean>() {
+            @Override
+            public void onResponse(DeviceBean data) {
+                if (data.getCode() == URLConstant.SUCCUSS_CODE) {
+                    if (data.getData() != null) {
+                        deviceItem = new String[data.getData().size()];
+                        deviceItemIsChecked = new boolean[data.getData().size()];
+                        for (int i = 0; i < data.getData().size(); i++) {
+                            deviceItem[i] = data.getData().get(i).getDevice_name();
+                            deviceItemIsChecked[i] = false;
+                        }
+                    }
+                } else {
+                    ToastUtil.showToastShort(RecordDetailActivity.this, "获取设备列表失败");
+                }
+            }
+
+            @Override
+            public void onFail(String msg) {
+                ToastUtil.showToastShort(RecordDetailActivity.this, "获取设备列表失败");
+            }
+        }, DeviceBean.class);
+    }
+
+    /**
+     * 获取维修人员列表
+     */
+    private String[] repairManItem;
+    private boolean[] repairManItemIsChecked;
+    final List<String> chooseRepairManResult = new ArrayList<>();
+
+    private void getRepairMan() {
+        ApiBuilder builder = new ApiBuilder().Url(URLConstant.PERSON_GET_LIST)
+                .Params("limit", UserInfoUtil.LIMIT_REPAIR_MAN);
+        ApiClient.getInstance().doGet(builder, new CallBack<PeopleBean>() {
+            @Override
+            public void onResponse(PeopleBean data) {
+                if (data.getCode() == URLConstant.SUCCUSS_CODE) {
+                    if (data.getData() != null) {
+                        repairManItem = new String[data.getData().size()];
+                        repairManItemIsChecked = new boolean[data.getData().size()];
+                        for (int i = 0; i < data.getData().size(); i++) {
+                            repairManItem[i] = data.getData().get(i).getNick_name();
+                            repairManItemIsChecked[i] = false;
+                        }
+                    }
+                } else {
+                    ToastUtil.showToastShort(RecordDetailActivity.this, "获取维修人员失败");
+                }
+            }
+
+            @Override
+            public void onFail(String msg) {
+                ToastUtil.showToastShort(RecordDetailActivity.this, "获取维修人员失败");
+            }
+        }, PeopleBean.class);
+    }
+
+    /**
+     * 获取维修项目列表
+     */
+    private String[] projectItem;
+    private boolean[] projectItemIsChecked;
+    final List<String> chooseProjectResult = new ArrayList<>();
+
+    private void getProject() {
+        ApiBuilder builder = new ApiBuilder().Url(URLConstant.PROJECT_GET_LIST);
+        ApiClient.getInstance().doGet(builder, new CallBack<ProjectBean>() {
+            @Override
+            public void onResponse(ProjectBean data) {
+                if (data.getCode() == URLConstant.SUCCUSS_CODE) {
+                    if (data.getData() != null) {
+                        projectItem = new String[data.getData().size()];
+                        projectItemIsChecked = new boolean[data.getData().size()];
+                        for (int i = 0; i < data.getData().size(); i++) {
+                            projectItem[i] = data.getData().get(i).getProject_name();
+                            projectItemIsChecked[i] = false;
+                        }
+                    }
+                } else {
+                    ToastUtil.showToastShort(RecordDetailActivity.this, "获取维修项目失败");
+                }
+            }
+
+            @Override
+            public void onFail(String msg) {
+                ToastUtil.showToastShort(RecordDetailActivity.this, "获取维修项目失败");
+            }
+        }, ProjectBean.class);
     }
 
 }

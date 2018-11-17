@@ -65,7 +65,7 @@ public class RepairRecordBean implements Serializable {
         private String center_name;
         private String device;
         private String fix_state;
-        private int return_fix;
+        private String return_fix;
         private String fix_cost;
         private String return_time;
 
@@ -141,11 +141,11 @@ public class RepairRecordBean implements Serializable {
             this.fix_state = fix_state;
         }
 
-        public int getReturn_fix() {
+        public String getReturn_fix() {
             return return_fix;
         }
 
-        public void setReturn_fix(int return_fix) {
+        public void setReturn_fix(String return_fix) {
             this.return_fix = return_fix;
         }
 

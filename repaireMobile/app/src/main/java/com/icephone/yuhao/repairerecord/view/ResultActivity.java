@@ -38,6 +38,11 @@ public class ResultActivity extends BaseActivity {
         onBackPressed();
     }
 
+    @OnClick(R.id.tv_output)
+    void outputFile() {
+        ToastUtil.showToastShort(this,"导出文件");
+    }
+
     private RepairRecordAdapter recordAdapter;
     private List<RepairRecordBean.DataBean> recordBeanList = new ArrayList<>();
 
@@ -75,12 +80,13 @@ public class ResultActivity extends BaseActivity {
         refreshList();
     }
 
+    //查询列表
     private void refreshList() {
         String centerName, startTime, endTime;
         centerName = getIntent().getStringExtra(StringConstant.KEY_SEARCH_CENTER_NAME);
         startTime = getIntent().getStringExtra(StringConstant.KEY_SEARCH_START_TIME);
         endTime = getIntent().getStringExtra(StringConstant.KEY_SEARCH_END_TIME);
-        Log.i("维修查询参数Result", centerName + ":" + startTime + "--" + endTime);
+//        Log.i("维修查询参数Result", centerName + ":" + startTime + "--" + endTime);
 
         ApiBuilder builder = new ApiBuilder().Url(URLConstant.REPAIR_GET_LIST)
                 .Params("center_name", centerName)
@@ -106,4 +112,5 @@ public class ResultActivity extends BaseActivity {
             }
         }, RepairRecordBean.class);
     }
+
 }

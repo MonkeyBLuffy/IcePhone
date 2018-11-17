@@ -3,6 +3,7 @@ package com.icephone.yuhao.repairerecord.view;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,8 +38,8 @@ public class PeopleDetailActivity extends BaseActivity {
     //选择人员权限身份
     @OnClick(R.id.rl_person_limit)
     void chooseLimit() {
-        String[] item = {"维修人员", "联社管理员", "总管理员"};
-        DialogUtil.showSingleChooseDialog(this, "选择联社", item,
+        final String[] item = {"维修人员", "联社管理员", "总管理员"};
+        DialogUtil.showSingleChooseDialog(this, "选择权限", item,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -49,8 +50,8 @@ public class PeopleDetailActivity extends BaseActivity {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        personLimitView.setText(centerItem[which]);
-                        limit = centerItem[which];
+                        personLimitView.setText(item[which]);
+                        limit = item[which];
                         if(limit.equals(UserInfoUtil.LIMIT_SUPER_MANAGER)){
                             centerNameView.setText("全部");
                             manage_center = "全部";
@@ -106,6 +107,7 @@ public class PeopleDetailActivity extends BaseActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            Log.d("上传测试", "submit: " + jsonObject.toString());
             RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
             ApiBuilder builder = new ApiBuilder()
                     .Url(url)
@@ -114,7 +116,7 @@ public class PeopleDetailActivity extends BaseActivity {
                 @Override
                 public void onResponse(GetResultBean data) {
                     if (data.getCode()==URLConstant.SUCCUSS_CODE){
-                        openActivity(SuccessActivity.class);
+                        openActivityAndCleanUp(SuccessActivity.class);
                         finish();
                     }else{
                         ToastUtil.showToastShort(PeopleDetailActivity.this,data.getMsg());
@@ -205,7 +207,7 @@ public class PeopleDetailActivity extends BaseActivity {
             setViewUntouchable();
 
             //如果是添加模式，那么都可以填,隐藏编辑按钮
-        } else if (mode.equals(StringConstant.KEY_ADD_MODE)) {
+        } else if (mode.equals(StringConstant.KEY_ADD_PEOPLE)) {
             ivEdit.setVisibility(View.INVISIBLE);
         }
     }

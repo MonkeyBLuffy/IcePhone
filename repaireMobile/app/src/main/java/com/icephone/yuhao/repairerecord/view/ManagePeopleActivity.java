@@ -48,9 +48,8 @@ public class ManagePeopleActivity extends BaseActivity {
 
     @OnClick(R.id.fl_add)
     void add() {
-        //TODO 人员管理的页面稍微复杂一些，需要同时设置账号密码
         Bundle bundle = new Bundle();
-        bundle.putString(StringConstant.KEY_PEOPLE_MODE, StringConstant.KEY_ADD_PEOPLE);
+        bundle.putString(StringConstant.KEY_MODE, StringConstant.KEY_ADD_PEOPLE);
         openActivity(PeopleDetailActivity.class, bundle);
     }
 

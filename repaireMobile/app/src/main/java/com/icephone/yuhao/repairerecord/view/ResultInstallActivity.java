@@ -39,6 +39,11 @@ public class ResultInstallActivity extends BaseActivity {
         onBackPressed();
     }
 
+    @OnClick(R.id.tv_output)
+    void outputFile() {
+        ToastUtil.showToastShort(this,"导出文件");
+    }
+
     private InstallRecordAdapter recordAdapter;
     private List<InstallRecordBean.DataBean> recordBeanList = new ArrayList<>();
 

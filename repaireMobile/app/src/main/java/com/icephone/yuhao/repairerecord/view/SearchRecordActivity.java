@@ -38,23 +38,27 @@ public class SearchRecordActivity extends BaseActivity {
 
     @OnClick(R.id.rl_center_name)
     void chooseCenterName() {
-        DialogUtil.showSingleChooseDialog(this, "选择联社", centerItem,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                },
-                new DialogInterface.OnClickListener() {
+        if (centerItem.length==0) {
+            getCenterList();
+        }else{
+            DialogUtil.showSingleChooseDialog(this, "选择联社", centerItem,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    },
+                    new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        tvCenterName.setText(centerItem[which]);
-                        centerName = centerItem[which];
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            tvCenterName.setText(centerItem[which]);
+                            centerName = centerItem[which];
+                        }
                     }
-                }
 
-        );
+            );
+        }
     }
 
     @OnClick(R.id.rl_start_time)
@@ -146,32 +150,6 @@ public class SearchRecordActivity extends BaseActivity {
                 ToastUtil.showToastShort(SearchRecordActivity.this, "获取联社列表失败");
             }
         }, CenterBean.class);
-    }
-
-    private String[] siteItem;
-
-    private void getSiteList(String siteProperty) {
-        ApiBuilder builder = new ApiBuilder().Url(URLConstant.SITE_GET_LIST);
-        ApiClient.getInstance().doGet(builder, new CallBack<SiteBean>() {
-            @Override
-            public void onResponse(SiteBean data) {
-                if (data.getCode() == URLConstant.SUCCUSS_CODE) {
-                    if (data.getData() != null) {
-                        siteItem = new String[data.getData().size()];
-                        for (int i=0;i< data.getData().size();i++){
-                            siteItem[i] = data.getData().get(i).getSite_name();
-                        }
-                    }
-                } else {
-                    ToastUtil.showToastShort(SearchRecordActivity.this, "查询失败请重试");
-                }
-            }
-
-            @Override
-            public void onFail(String msg) {
-                ToastUtil.showToastShort(SearchRecordActivity.this, "查询失败请重试");
-            }
-        }, SiteBean.class);
     }
 
 }

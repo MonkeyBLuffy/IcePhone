@@ -24,7 +24,7 @@ public class URLConstant {
     public final static String PERSON_GET_LIST = "app/getPersonList";
     public final static String PERSON_ADD = "app/addPerson";
     public final static String PERSON_DELETE = "app/deletePerson";
-    public final static String PERSON_CHANGE = "changePerson";
+    public final static String PERSON_CHANGE = "app/changePerson";
     // 联社管理
     public final static String CENTER_GET_LIST = "app/getCenterList";
     public final static String CENTER_ADD = "app/addCenterRecord";
