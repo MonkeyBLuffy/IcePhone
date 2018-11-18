@@ -17,6 +17,12 @@ public class TimeUtil {
         return df.format(calendar.getTime());
     }
 
+    public static String getCurTime(){
+        Calendar calendar = Calendar.getInstance(); //获取当前时间
+        SimpleDateFormat df = new SimpleDateFormat("yyyy年MM月dd日", Locale.CHINA);
+        return df.format(calendar.getTime());
+    }
+
     /**
      * 将时间转换成显示的时间
      * @param date 20180910

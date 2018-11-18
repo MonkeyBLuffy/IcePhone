@@ -60,7 +60,7 @@ public class InstallRecordDetailActivity extends BaseActivity {
     private String device = "";
     private String install_state = "";
     private String install_complete = "";
-    private String install_cost = "";
+    private int install_cost = 0;
 
     @OnClick(R.id.rl_back)
     void back() {
@@ -172,7 +172,6 @@ public class InstallRecordDetailActivity extends BaseActivity {
                     }
             );
         }
-
     }
 
     @OnClick(R.id.rl_install_pro)
@@ -233,8 +232,8 @@ public class InstallRecordDetailActivity extends BaseActivity {
 
     @OnClick(R.id.rl_install_complete)
     void chooseReturnFix() {
-        final String[] item = {"完成", "未完成"};
-        DialogUtil.showSingleChooseDialog(this, "选择是否完成", item,
+        final String[] item = {"完工", "未完工"};
+        DialogUtil.showSingleChooseDialog(this, "选择是否完工", item,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -427,14 +426,11 @@ public class InstallRecordDetailActivity extends BaseActivity {
             return false;
         }
         if (install_complete.equals("")) {
-            ToastUtil.showToastShort(this, "请选择是否完成");
+            ToastUtil.showToastShort(this, "请选择是否完工");
             return false;
         }
-        install_cost = costView.getText() == null ? "" : costView.getText().toString();
-        if (install_cost.equals("")) {
-            ToastUtil.showToastShort(this, "请填写安装费用");
-            return false;
-        }
+        install_cost = costView.getText() == null ? 0 : Integer.valueOf(costView.getText().toString());
+
         return true;
     }
 

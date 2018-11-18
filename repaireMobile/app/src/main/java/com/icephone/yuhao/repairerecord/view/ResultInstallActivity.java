@@ -14,6 +14,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.icephone.yuhao.repairerecord.R;
 import com.icephone.yuhao.repairerecord.Util.OutputEXLUtil;
 import com.icephone.yuhao.repairerecord.Util.StringConstant;
+import com.icephone.yuhao.repairerecord.Util.TimeUtil;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
 import com.icephone.yuhao.repairerecord.adapter.AdapterFacory;
 import com.icephone.yuhao.repairerecord.adapter.InstallRecordAdapter;
@@ -116,37 +117,35 @@ public class ResultInstallActivity extends BaseActivity implements EasyPermissio
 
     private void outputFile() {
 
-        File file = new File(path);
-        //文件夹是否已经存在
-        if (!file.exists()) {
-            file.mkdirs();
-        }
+//        File file = new File(path);
+//        //文件夹是否已经存在
+//        if (!file.exists()) {
+//            file.mkdirs();
+//        }
+//
+//        String fileName = file.toString() + "/" + "安装记录.xls";
 
-        String fileName = file.toString() + "/" + "安装记录.xls";
-
+        String fileName = buildFileName();
+        Log.i("file_name", fileName);
         //TODO 导出excel文件
-        KProgressHUD dialog = KProgressHUD.create(ResultInstallActivity.this)
-                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setDetailsLabel("正在导出文件")
-                .setCancellable(true)
-                .setAnimationSpeed(2)
-                .setDimAmount(0.5f);
-        String[] title = {"时间", "联社名称", "网点全称", "网点人员", "安装人员","安装项目","设备明细","安装详情","是否完成","安装费用"};
+
+        String[] title = {"时间", "联社名称", "网点全称", "网点人员", "安装人员","安装项目","设备明细","安装详情","是否完工","安装费用"};
         OutputEXLUtil.initExcel(fileName, title);
-        OutputEXLUtil.writeInstallListToExcel(recordBeanList, fileName, ResultInstallActivity.this,dialog);
+        OutputEXLUtil.writeInstallListToExcel(recordBeanList, fileName, ResultInstallActivity.this);
+
     }
 
+    String centerNameSearch, startTimeSearch, endTimeSearch;
     private void refreshList() {
-        String centerName, startTime, endTime;
-        centerName = getIntent().getStringExtra(StringConstant.KEY_SEARCH_CENTER_NAME);
-        startTime = getIntent().getStringExtra(StringConstant.KEY_SEARCH_START_TIME);
-        endTime = getIntent().getStringExtra(StringConstant.KEY_SEARCH_END_TIME);
-        Log.i("查询参数Result", centerName + ":" + startTime + "--" + endTime);
+        centerNameSearch = getIntent().getStringExtra(StringConstant.KEY_SEARCH_CENTER_NAME);
+        startTimeSearch = getIntent().getStringExtra(StringConstant.KEY_SEARCH_START_TIME);
+        endTimeSearch = getIntent().getStringExtra(StringConstant.KEY_SEARCH_END_TIME);
+//        Log.i("查询参数Result", centerNameSearch + ":" + startTimeSearch + "--" + endTimeSearch);
 
         ApiBuilder builder = new ApiBuilder().Url(URLConstant.INSTALL_GET_LIST)
-                .Params("center_name", centerName)
-                .Params("start_time", startTime)
-                .Params("end_time", endTime);
+                .Params("center_name", centerNameSearch)
+                .Params("start_time", startTimeSearch)
+                .Params("end_time", endTimeSearch);
         ApiClient.getInstance().doGet(builder, new CallBack<InstallRecordBean>() {
             @Override
             public void onResponse(InstallRecordBean data) {
@@ -167,6 +166,39 @@ public class ResultInstallActivity extends BaseActivity implements EasyPermissio
             }
         }, InstallRecordBean.class);
     }
+
+    private String buildFileName() {
+
+        File file = new File(path);
+        //文件夹是否已经存在
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        StringBuilder fileName = new StringBuilder();
+        fileName.append(file.toString()).append("/");
+        //联社
+        if (centerNameSearch.equals(StringConstant.NULL_STRING)){
+            fileName.append("全部联社").append("-");
+        }else{
+            fileName.append(centerNameSearch).append("-");
+        }
+        //开始时间
+        if (startTimeSearch.equals(StringConstant.NULL_STRING)){
+            fileName.append("2018年1月1日").append("-");
+        }else{
+            fileName.append(startTimeSearch).append("-");
+        }
+        //结束时间
+        if (endTimeSearch.equals(StringConstant.NULL_STRING)){
+            fileName.append(TimeUtil.getCurTime()).append("-");
+        }else{
+            fileName.append(endTimeSearch).append("-");
+        }
+        fileName.append("安装记录.xls");
+        return fileName.toString();
+    }
+
 
     /**
      * 权限申请成功回调

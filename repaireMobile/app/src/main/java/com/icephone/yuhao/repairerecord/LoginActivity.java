@@ -123,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
+            showProgress(true);
             ApiBuilder builder = new ApiBuilder().Url(URLConstant.USER_LOGIN)
                     .Params("account", email)
                     .Params("password", password);
@@ -133,15 +134,16 @@ public class LoginActivity extends AppCompatActivity {
                         ToastUtil.showToastShort(LoginActivity.this,"欢迎使用");
                         UserInfoUtil.saveUserInfo(getApplicationContext(), data.getData());
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        showProgress(false);
                         finish();
                     }else {
                         ToastUtil.showToastShort(LoginActivity.this,data.getMsg());
                     }
-
                 }
 
                 @Override
                 public void onFail(String msg) {
+                    showProgress(false);
                     ToastUtil.showToastShort(LoginActivity.this,"登录失败，请检查网络重试");
                 }
             }, LoginBean.class);

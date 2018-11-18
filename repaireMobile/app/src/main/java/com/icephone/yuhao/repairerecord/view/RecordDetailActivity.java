@@ -62,9 +62,10 @@ public class RecordDetailActivity extends BaseActivity {
     private String center_name = "";
     private String device = "";
     private String fix_state = "";
-    private String fix_cost = "";
+    private int fix_cost = 0;
     private String return_fix = "";
     private String return_time = "未填写";
+    private String warranty = ""; //选择是否在保修期内
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +107,8 @@ public class RecordDetailActivity extends BaseActivity {
             TextView returnFixView;
     @BindView(R.id.et_cost) //花费（管理员填写）
             EditText costView;
+    @BindView(R.id.tv_repair_warranty)
+            TextView warrantyView;
 
     //需要选择的一些选项
     @BindView(R.id.ll_time) //维修时间
@@ -122,6 +125,8 @@ public class RecordDetailActivity extends BaseActivity {
             RelativeLayout rlReturnFix;
     @BindView(R.id.rl_device) //选择设备
             RelativeLayout rlDevice;
+    @BindView(R.id.rl_repair_warranty)
+            RelativeLayout rlRepairWarranty;
 
     @OnClick(R.id.ll_time)
     void showTimeDialog() {
@@ -262,6 +267,28 @@ public class RecordDetailActivity extends BaseActivity {
         );
     }
 
+    //是否在保修期内
+    @OnClick(R.id.rl_repair_warranty)
+    void chooseIsWarranty(){
+        final String[] item = {"是", "否"};
+        DialogUtil.showSingleChooseDialog(this, "选择是否在保修期内", item,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                },
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        warranty = item[which];
+                        warrantyView.setText(warranty);
+                    }
+                }
+        );
+    }
+
     @OnClick(R.id.rl_device)
     void chooseDevice() {
         // 设备——多选
@@ -335,6 +362,7 @@ public class RecordDetailActivity extends BaseActivity {
                 jsonObject.put("return_fix", return_fix);
                 jsonObject.put("fix_cost", fix_cost);
                 jsonObject.put("return_time", return_time);
+                jsonObject.put("warranty", warranty);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -428,6 +456,10 @@ public class RecordDetailActivity extends BaseActivity {
             ToastUtil.showToastShort(this, "请选择维修项目");
             return false;
         }
+        if (warranty.equals("")) {
+            ToastUtil.showToastShort(this, "请选择是否在保修期内");
+            return false;
+        }
         if (device.equals("")) {
             ToastUtil.showToastShort(this, "请选择设备明细");
             return false;
@@ -441,11 +473,7 @@ public class RecordDetailActivity extends BaseActivity {
             ToastUtil.showToastShort(this, "请选择是否返厂维修");
             return false;
         }
-        fix_cost = costView.getText() == null ? "" : costView.getText().toString();
-        if (fix_cost.equals("")) {
-            ToastUtil.showToastShort(this, "请填写维修费用");
-            return false;
-        }
+        fix_cost = costView.getText() == null ? 0 : Integer.valueOf(costView.getText().toString());
         return true;
     }
 
@@ -490,13 +518,16 @@ public class RecordDetailActivity extends BaseActivity {
         fixStateView.setText(fix_state);
 
         fix_cost = bean.getFix_cost();
-        costView.setText(fix_cost);
+        costView.setText(String.valueOf(fix_cost));
 
         return_fix = bean.getReturn_fix();
         returnFixView.setText(return_fix);
 
         return_time = bean.getReturn_time();
         returnTimeView.setText(return_time);
+
+        warranty = bean.getWarranty();
+        warrantyView.setText(warranty);
 
         setViewUntouchable();
     }
@@ -512,6 +543,7 @@ public class RecordDetailActivity extends BaseActivity {
         rlRepairPerson.setEnabled(false);
         rlReturnFix.setEnabled(false);
         rlDevice.setEnabled(false);
+        rlRepairWarranty.setEnabled(false);
 
         returnTimeView.setFocusable(false);
         sitePersonView.setFocusable(false);
@@ -531,6 +563,7 @@ public class RecordDetailActivity extends BaseActivity {
         rlRepairPerson.setEnabled(true);
         rlReturnFix.setEnabled(true);
         rlDevice.setEnabled(true);
+        rlRepairWarranty.setEnabled(true);
 
         returnTimeView.setFocusable(true);
         returnTimeView.setFocusableInTouchMode(true);

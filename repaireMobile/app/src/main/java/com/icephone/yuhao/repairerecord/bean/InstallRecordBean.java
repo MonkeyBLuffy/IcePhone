@@ -5,11 +5,10 @@ import java.util.List;
 
 public class InstallRecordBean {
 
-
     /**
      * code : 200
      * msg : 查询成功
-     * data : [{"_id":"5bdc3edaf4d21d91346961b5","time":"20181009","center_name":"清苑联社","site_name":"第一储蓄所","site_person":"小王","install_person":"李艳辉，林雨","install_pro":"电视监控","device":"摄像机","install_state":"摄像机无图像，保修期内进行更换","install_complete":0,"install_cost":"100元"}]
+     * data : [{"_id":"5bf01619f120772bd90c8e66","time":"20181117","site_name":"玉川信用社","install_pro":"周界报警，电视维修","install_person":"林雨","site_person":"123","center_name":"满城联社","device":"红外摄像机，柜员枪机","install_state":"123","install_complete":"完成","install_cost":100},{"_id":"5bf0ef20f120772bd90c8e69","time":"20181118","site_name":"第一储蓄所","install_pro":"高清摄像机，ATM机智能分析","install_person":"林雨，李艳辉","site_person":"小张","center_name":"顺平联社","device":"红外摄像机，柜员枪机","install_state":"安装","install_complete":"完成","install_cost":100}]
      */
 
     private int code;
@@ -42,30 +41,30 @@ public class InstallRecordBean {
 
     public static class DataBean implements Serializable {
         /**
-         * _id : 5bdc3edaf4d21d91346961b5
-         * time : 20181009
-         * center_name : 清苑联社
-         * site_name : 第一储蓄所
-         * site_person : 小王
-         * install_person : 李艳辉，林雨
-         * install_pro : 电视监控
-         * device : 摄像机
-         * install_state : 摄像机无图像，保修期内进行更换
+         * _id : 5bf01619f120772bd90c8e66
+         * time : 20181117
+         * site_name : 玉川信用社
+         * install_pro : 周界报警，电视维修
+         * install_person : 林雨
+         * site_person : 123
+         * center_name : 满城联社
+         * device : 红外摄像机，柜员枪机
+         * install_state : 123
          * install_complete : 完成
-         * install_cost : 100元
+         * install_cost : 100
          */
 
         private String _id;
         private String time;
-        private String center_name;
         private String site_name;
-        private String site_person;
-        private String install_person;
         private String install_pro;
+        private String install_person;
+        private String site_person;
+        private String center_name;
         private String device;
         private String install_state;
         private String install_complete;
-        private String install_cost;
+        private int install_cost;
 
         public String get_id() {
             return _id;
@@ -83,14 +82,6 @@ public class InstallRecordBean {
             this.time = time;
         }
 
-        public String getCenter_name() {
-            return center_name;
-        }
-
-        public void setCenter_name(String center_name) {
-            this.center_name = center_name;
-        }
-
         public String getSite_name() {
             return site_name;
         }
@@ -99,12 +90,12 @@ public class InstallRecordBean {
             this.site_name = site_name;
         }
 
-        public String getSite_person() {
-            return site_person;
+        public String getInstall_pro() {
+            return install_pro;
         }
 
-        public void setSite_person(String site_person) {
-            this.site_person = site_person;
+        public void setInstall_pro(String install_pro) {
+            this.install_pro = install_pro;
         }
 
         public String getInstall_person() {
@@ -115,12 +106,20 @@ public class InstallRecordBean {
             this.install_person = install_person;
         }
 
-        public String getInstall_pro() {
-            return install_pro;
+        public String getSite_person() {
+            return site_person;
         }
 
-        public void setInstall_pro(String install_pro) {
-            this.install_pro = install_pro;
+        public void setSite_person(String site_person) {
+            this.site_person = site_person;
+        }
+
+        public String getCenter_name() {
+            return center_name;
+        }
+
+        public void setCenter_name(String center_name) {
+            this.center_name = center_name;
         }
 
         public String getDevice() {
@@ -147,11 +146,11 @@ public class InstallRecordBean {
             this.install_complete = install_complete;
         }
 
-        public String getInstall_cost() {
+        public int getInstall_cost() {
             return install_cost;
         }
 
-        public void setInstall_cost(String install_cost) {
+        public void setInstall_cost(int install_cost) {
             this.install_cost = install_cost;
         }
     }

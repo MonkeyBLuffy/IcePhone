@@ -13,7 +13,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.icephone.yuhao.repairerecord.R;
 import com.icephone.yuhao.repairerecord.Util.OutputEXLUtil;
 import com.icephone.yuhao.repairerecord.Util.StringConstant;
+import com.icephone.yuhao.repairerecord.Util.TimeUtil;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
+import com.icephone.yuhao.repairerecord.Util.UserInfoUtil;
 import com.icephone.yuhao.repairerecord.adapter.AdapterFacory;
 import com.icephone.yuhao.repairerecord.adapter.RepairRecordAdapter;
 import com.icephone.yuhao.repairerecord.bean.CenterBean;
@@ -115,36 +117,26 @@ public class ResultActivity extends BaseActivity implements EasyPermissions.Perm
 
     private void outputFile() {
 
-        File file = new File(path);
-        //文件夹是否已经存在
-        if (!file.exists()) {
-            file.mkdirs();
-        }
+        String fileName = buildFileName();
+        Log.i("file_name", fileName);
 
-        String fileName = file.toString() + "/" + "维修记录.xls";
-        KProgressHUD dialog = KProgressHUD.create(ResultActivity.this)
-                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setDetailsLabel("正在导出文件")
-                .setCancellable(true)
-                .setAnimationSpeed(2)
-                .setDimAmount(0.5f);
-        String[] title = {"时间", "联社名称", "网点全称", "网点人员", "维修人员","维修项目","更换设备明细","维修详细","是否返厂维修","维修费","返厂返回时间"};
+        String[] title = {"时间", "联社名称", "网点全称", "网点人员", "维修人员","维修项目","是否在保修期内","更换设备明细","维修详细","是否返厂维修","设备返厂情况","维修费"};
         OutputEXLUtil.initExcel(fileName, title);
-        OutputEXLUtil.writeRepairListToExcel(recordBeanList, fileName, ResultActivity.this,dialog);
+        OutputEXLUtil.writeRepairListToExcel(recordBeanList, fileName, ResultActivity.this);
     }
 
     //查询列表
+    private String centerNameSearch, startTimeSearch, endTimeSearch;
     private void refreshList() {
-        String centerName, startTime, endTime;
-        centerName = getIntent().getStringExtra(StringConstant.KEY_SEARCH_CENTER_NAME);
-        startTime = getIntent().getStringExtra(StringConstant.KEY_SEARCH_START_TIME);
-        endTime = getIntent().getStringExtra(StringConstant.KEY_SEARCH_END_TIME);
+        centerNameSearch = getIntent().getStringExtra(StringConstant.KEY_SEARCH_CENTER_NAME);
+        startTimeSearch = getIntent().getStringExtra(StringConstant.KEY_SEARCH_START_TIME);
+        endTimeSearch = getIntent().getStringExtra(StringConstant.KEY_SEARCH_END_TIME);
 //        Log.i("维修查询参数Result", centerName + ":" + startTime + "--" + endTime);
 
         ApiBuilder builder = new ApiBuilder().Url(URLConstant.REPAIR_GET_LIST)
-                .Params("center_name", centerName)
-                .Params("start_time", startTime)
-                .Params("end_time", endTime);
+                .Params("center_name", centerNameSearch)
+                .Params("start_time", startTimeSearch)
+                .Params("end_time", endTimeSearch);
         ApiClient.getInstance().doGet(builder, new CallBack<RepairRecordBean>() {
             @Override
             public void onResponse(RepairRecordBean data) {
@@ -164,6 +156,38 @@ public class ResultActivity extends BaseActivity implements EasyPermissions.Perm
                 ToastUtil.showToastShort(ResultActivity.this, "查询失败请重试");
             }
         }, RepairRecordBean.class);
+    }
+
+    private String buildFileName() {
+
+        File file = new File(path);
+        //文件夹是否已经存在
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        StringBuilder fileName = new StringBuilder();
+        fileName.append(file.toString()).append("/");
+        //联社
+        if (centerNameSearch.equals(StringConstant.NULL_STRING)){
+            fileName.append("全部联社").append("-");
+        }else{
+            fileName.append(centerNameSearch).append("-");
+        }
+        //开始时间
+        if (startTimeSearch.equals(StringConstant.NULL_STRING)){
+            fileName.append("2018年1月1日").append("-");
+        }else{
+            fileName.append(startTimeSearch).append("-");
+        }
+        //结束时间
+        if (endTimeSearch.equals(StringConstant.NULL_STRING)){
+            fileName.append(TimeUtil.getCurTime()).append("-");
+        }else{
+            fileName.append(endTimeSearch).append("-");
+        }
+        fileName.append("维修记录.xls");
+        return fileName.toString();
     }
 
     /**

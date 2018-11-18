@@ -1,6 +1,7 @@
 package com.icephone.yuhao.repairerecord.Util;
 
 import android.content.Context;
+import android.content.DialogInterface;
 
 import com.icephone.yuhao.repairerecord.bean.InstallRecordBean;
 import com.icephone.yuhao.repairerecord.bean.ProjectBean;
@@ -18,6 +19,7 @@ import jxl.Workbook;
 import jxl.WorkbookSettings;
 import jxl.format.Colour;
 import jxl.write.Label;
+import jxl.write.Number;
 import jxl.write.WritableCell;
 import jxl.write.WritableCellFormat;
 import jxl.write.WritableFont;
@@ -106,10 +108,16 @@ public class OutputEXLUtil {
     }
 
     //    @SuppressWarnings("unchecked")
-    public static void writeRepairListToExcel(List<RepairRecordBean.DataBean> objList, String fileName, Context c, KProgressHUD dialog) {
+    public static void writeRepairListToExcel(List<RepairRecordBean.DataBean> objList, String fileName, Context c) {
 
         if (objList != null && objList.size() > 0) {
-            dialog.show();
+            KProgressHUD dialog = KProgressHUD.create(c)
+                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                    .setDetailsLabel("正在导出文件")
+                    .setCancellable(true)
+                    .setAnimationSpeed(2)
+                    .setDimAmount(0.5f)
+                    .show();
             WritableWorkbook writebook = null;
             InputStream in = null;
             try {
@@ -129,10 +137,10 @@ public class OutputEXLUtil {
                     list.add(bean.getSite_person());
                     list.add(bean.getRepair_person());
                     list.add(bean.getRepair_pro());
+                    list.add(bean.getWarranty());
                     list.add(bean.getDevice());
                     list.add(bean.getFix_state());
                     list.add(bean.getReturn_fix());
-                    list.add(bean.getFix_cost());
                     list.add(bean.getReturn_time());
 
                     for (int i = 0; i < list.size(); i++) {
@@ -145,17 +153,29 @@ public class OutputEXLUtil {
                             sheet.setColumnView(i, list.get(i).length() + 5);
                         }
                     }
+                    sheet.addCell(new Number(list.size(), j + 1, bean.getFix_cost(), arial12format));
+
                     //设置行高
                     sheet.setRowView(j + 1, 350);
                 }
 
                 writebook.write();
-                ToastUtil.showToastShort(c, "导出成功");
                 dialog.dismiss();
+                DialogUtil.showAlertDialog(c, "导出成功", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }, null);
             } catch (Exception e) {
                 e.printStackTrace();
                 dialog.dismiss();
-                ToastUtil.showToastShort(c, "导出失败");
+                DialogUtil.showAlertDialog(c, "导出失败", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }, null);
             } finally {
                 if (writebook != null) {
                     try {
@@ -175,13 +195,24 @@ public class OutputEXLUtil {
             }
 
         } else {
-            ToastUtil.showToastShort(c,"数据为空，导出失败");
+            DialogUtil.showAlertDialog(c, "数据为空，导出失败", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }, null);
         }
     }
 
-    public static void writeInstallListToExcel(List<InstallRecordBean.DataBean> objList, String fileName, Context c, KProgressHUD dialog) {
+    public static void writeInstallListToExcel(List<InstallRecordBean.DataBean> objList, String fileName, Context c) {
         if (objList != null && objList.size() > 0) {
-            dialog.show();
+            KProgressHUD dialog = KProgressHUD.create(c)
+                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                    .setDetailsLabel("正在导出文件")
+                    .setCancellable(true)
+                    .setAnimationSpeed(2)
+                    .setDimAmount(0.5f)
+                    .show();
             WritableWorkbook writebook = null;
             InputStream in = null;
             try {
@@ -204,7 +235,6 @@ public class OutputEXLUtil {
                     list.add(bean.getDevice());
                     list.add(bean.getInstall_state());
                     list.add(bean.getInstall_complete());
-                    list.add(bean.getInstall_cost());
 
                     for (int i = 0; i < list.size(); i++) {
                         sheet.addCell(new Label(i, j + 1, list.get(i), arial12format));
@@ -216,17 +246,28 @@ public class OutputEXLUtil {
                             sheet.setColumnView(i, list.get(i).length() + 5);
                         }
                     }
+                    sheet.addCell(new Number(list.size(), j + 1, bean.getInstall_cost(), arial12format));
                     //设置行高
                     sheet.setRowView(j + 1, 350);
                 }
 
                 writebook.write();
-                ToastUtil.showToastShort(c, "导出成功");
                 dialog.dismiss();
+                DialogUtil.showAlertDialog(c, "导出成功", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }, null);
             } catch (Exception e) {
                 e.printStackTrace();
                 dialog.dismiss();
-                ToastUtil.showToastShort(c, "导出失败");
+                DialogUtil.showAlertDialog(c, "导出失败", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }, null);
             } finally {
                 if (writebook != null) {
                     try {
@@ -246,7 +287,12 @@ public class OutputEXLUtil {
             }
 
         }else{
-            ToastUtil.showToastShort(c,"数据为空，导出失败");
+            DialogUtil.showAlertDialog(c, "数据为空，导出失败", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }, null);
         }
     }
 }
