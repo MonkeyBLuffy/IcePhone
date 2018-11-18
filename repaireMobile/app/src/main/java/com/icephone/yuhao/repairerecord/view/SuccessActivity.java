@@ -14,7 +14,7 @@ public class SuccessActivity extends BaseActivity {
 
     @OnClick(R.id.rl_back)
     void back() {
-        openActivity(MainActivity.class);
+        openActivityAndCleanUp(MainActivity.class);
     }
 
     @Override

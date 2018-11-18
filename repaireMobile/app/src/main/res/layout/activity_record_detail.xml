@@ -422,39 +422,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/y20"
-                        android:text="返厂返回时间：（管理员填写）"
+                        android:text="设备返厂情况：（管理员填写）"
                         android:textSize="@dimen/y26" />
 
-                    <RelativeLayout
-                        android:id="@+id/rl_return_time"
+                    <EditText
+                        android:id="@+id/et_return_time"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/y90"
                         android:layout_marginTop="@dimen/y20"
                         android:background="@drawable/bg_gray_line"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tv_return_time"
-                            android:layout_width="@dimen/x530"
-                            android:layout_height="@dimen/y200"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="@dimen/x20"
-                            android:gravity="center_vertical"
-                            android:maxLines="3"
-                            android:text="请选择时间"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/y28" />
-
-                        <ImageView
-                            android:layout_width="@dimen/x30"
-                            android:layout_height="@dimen/y30"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="@dimen/x30"
-                            android:src="@drawable/ic_forward" />
-
-                    </RelativeLayout>
+                        android:hint="请输入设备返厂情况"
+                        android:paddingStart="@dimen/x20"
+                        android:paddingLeft="@dimen/x20"
+                        android:textSize="@dimen/y28" />
 
                 </LinearLayout>
 

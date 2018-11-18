@@ -100,8 +100,8 @@ public class RecordDetailActivity extends BaseActivity {
             TextView deviceView;
     @BindView(R.id.et_site_person) //网点人员（填写）
             EditText sitePersonView;
-    @BindView(R.id.tv_return_time) //返厂时间（选择）
-            TextView returnTimeView;
+    @BindView(R.id.et_return_time) //返厂时间（管理员填写）
+            EditText returnTimeView;
     @BindView(R.id.tv_return_fix) //是否返厂维修（选择）
             TextView returnFixView;
     @BindView(R.id.et_cost) //花费（管理员填写）
@@ -118,8 +118,6 @@ public class RecordDetailActivity extends BaseActivity {
             RelativeLayout rlRepairPro;
     @BindView(R.id.rl_repair_person) // 维修人员
             RelativeLayout rlRepairPerson;
-    @BindView(R.id.rl_return_time) // 返厂时间（需要管理员填写）
-            RelativeLayout rlReturnTime;
     @BindView(R.id.rl_return_fix) //是否返厂维修
             RelativeLayout rlReturnFix;
     @BindView(R.id.rl_device) //选择设备
@@ -243,23 +241,6 @@ public class RecordDetailActivity extends BaseActivity {
         }
     }
 
-    @OnClick(R.id.rl_return_time)
-    void chooseReturnTime() {
-        if (UserInfoUtil.isSuperManager(getApplicationContext())) {
-            DialogUtil.showDateDialog(this, calendar, new DatePickerDialog.OnDateSetListener() {
-
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    calendar.set(year, month, dayOfMonth);
-                    returnTimeView.setText(TimeUtil.getShowTime(calendar));
-                    return_time = TimeUtil.getUploadTime(calendar);
-                }
-            });
-        } else {
-            ToastUtil.showToastShort(RecordDetailActivity.this, "只能由管理员填写");
-        }
-    }
-
     @OnClick(R.id.rl_return_fix)
     void chooseReturnFix() {
         final String[] item = {"未返厂维修", "返厂维修"};
@@ -307,18 +288,28 @@ public class RecordDetailActivity extends BaseActivity {
 
     @OnClick(R.id.iv_delete)
     void delete() {
-        DialogUtil.showAlertDialog(RecordDetailActivity.this, "确定删除吗", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteRecord();
-            }
-        },null);
+        if (UserInfoUtil.isSuperManager(getApplicationContext())) {
+            DialogUtil.showAlertDialog(RecordDetailActivity.this, "确定删除吗", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    deleteRecord();
+                }
+            }, null);
+        } else {
+            ToastUtil.showToastShort(this, "只能由总管理员操作");
+        }
+
     }
 
     @OnClick(R.id.iv_edit)
     void editRecord() {
-        setViewTouchable();
-        ToastUtil.showToastShort(this, "编辑模式");
+        if (UserInfoUtil.isSuperManager(getApplicationContext())) {
+            setViewTouchable();
+            ToastUtil.showToastShort(this, "编辑模式");
+        } else {
+            ToastUtil.showToastShort(this, "只能由总管理员操作");
+        }
+
     }
 
     // 上传
@@ -357,7 +348,6 @@ public class RecordDetailActivity extends BaseActivity {
                 public void onResponse(GetResultBean data) {
                     if (data.getCode() == URLConstant.SUCCUSS_CODE) {
                         openActivity(SuccessActivity.class);
-                        finish();
                     } else {
                         ToastUtil.showToastShort(RecordDetailActivity.this, "请重试");
                     }
@@ -387,6 +377,9 @@ public class RecordDetailActivity extends BaseActivity {
                 ivDelete.setVisibility(View.GONE);
                 ivEdit.setVisibility(View.GONE);
                 btSubmit.setVisibility(View.VISIBLE);
+                if (!UserInfoUtil.isSuperManager(getApplicationContext())) {
+                    returnTimeView.setFocusable(false);
+                }
                 addRecordView();
                 break;
             case StringConstant.KEY_FIX_MODE:
@@ -517,10 +510,10 @@ public class RecordDetailActivity extends BaseActivity {
         rlSiteName.setEnabled(false);
         rlRepairPro.setEnabled(false);
         rlRepairPerson.setEnabled(false);
-        rlReturnTime.setEnabled(false);
         rlReturnFix.setEnabled(false);
         rlDevice.setEnabled(false);
 
+        returnTimeView.setFocusable(false);
         sitePersonView.setFocusable(false);
         fixStateView.setFocusable(false);
         costView.setFocusable(false);
@@ -536,10 +529,11 @@ public class RecordDetailActivity extends BaseActivity {
         rlSiteName.setEnabled(true);
         rlRepairPro.setEnabled(true);
         rlRepairPerson.setEnabled(true);
-        rlReturnTime.setEnabled(true);
         rlReturnFix.setEnabled(true);
         rlDevice.setEnabled(true);
 
+        returnTimeView.setFocusable(true);
+        returnTimeView.setFocusableInTouchMode(true);
         costView.setFocusable(true);
         costView.setFocusableInTouchMode(true);
         sitePersonView.setFocusable(true);

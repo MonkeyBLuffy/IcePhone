@@ -181,12 +181,12 @@ public class InstallRecordDetailActivity extends BaseActivity {
         if (projectItem == null) {
             getProject();
         } else {
-            DialogUtil.showMultiChooseDialog(this, "选择维修项目", projectItem, projectItemIsChecked,
+            DialogUtil.showMultiChooseDialog(this, "选择安装项目", projectItem, projectItemIsChecked,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             install_pro = StringFormatUtil.ListToString(chooseProjectResult);
-                            installProView.setText(install_pro.equals("") ? "请选择维修项目" : install_pro);
+                            installProView.setText(install_pro.equals("") ? "请选择安装项目" : install_pro);
                             dialog.dismiss();
                         }
                     }, new DialogInterface.OnMultiChoiceClickListener() {
@@ -205,16 +205,16 @@ public class InstallRecordDetailActivity extends BaseActivity {
 
     @OnClick(R.id.rl_install_person)
     void chooseInstallPerson() {
-        //维修人员——多选
+        //安装人员——多选
         if (repairManItem == null) {
             getRepairMan();
         } else {
-            DialogUtil.showMultiChooseDialog(this, "选择维修人员", repairManItem, repairManItemIsChecked,
+            DialogUtil.showMultiChooseDialog(this, "选择安装人员", repairManItem, repairManItemIsChecked,
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             install_person = StringFormatUtil.ListToString(chooseRepairManResult);
-                            installPersonView.setText(install_person.equals("") ? "请选择维修人员" : install_person);
+                            installPersonView.setText(install_person.equals("") ? "请选择安装人员" : install_person);
                             dialog.dismiss();
                         }
                     }, new DialogInterface.OnMultiChoiceClickListener() {
@@ -278,18 +278,27 @@ public class InstallRecordDetailActivity extends BaseActivity {
 
     @OnClick(R.id.iv_delete)
     void delete() {
-        DialogUtil.showAlertDialog(InstallRecordDetailActivity.this, "确定删除吗", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                deleteRecord();
-            }
-        }, null);
+        if (UserInfoUtil.isSuperManager(getApplicationContext())) {
+            DialogUtil.showAlertDialog(InstallRecordDetailActivity.this, "确定删除吗", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    deleteRecord();
+                }
+            }, null);
+        } else {
+            ToastUtil.showToastShort(this, "只能由总管理员操作");
+        }
     }
 
     @OnClick(R.id.iv_edit)
     void editRecord() {
-        setViewTouchable();
-        ToastUtil.showToastShort(this, "编辑模式");
+        if (UserInfoUtil.isSuperManager(getApplicationContext())) {
+            setViewTouchable();
+            ToastUtil.showToastShort(this, "编辑模式");
+        } else {
+            ToastUtil.showToastShort(this, "只能由总管理员操作");
+        }
+
     }
 
     // 上传
@@ -327,7 +336,6 @@ public class InstallRecordDetailActivity extends BaseActivity {
                 public void onResponse(GetResultBean data) {
                     if (data.getCode() == URLConstant.SUCCUSS_CODE) {
                         openActivity(SuccessActivity.class);
-                        finish();
                     } else {
                         ToastUtil.showToastShort(InstallRecordDetailActivity.this, "请重试");
                     }
@@ -424,7 +432,7 @@ public class InstallRecordDetailActivity extends BaseActivity {
         }
         install_cost = costView.getText() == null ? "" : costView.getText().toString();
         if (install_cost.equals("")) {
-            ToastUtil.showToastShort(this, "请填写维修费用");
+            ToastUtil.showToastShort(this, "请填写安装费用");
             return false;
         }
         return true;
@@ -656,13 +664,13 @@ public class InstallRecordDetailActivity extends BaseActivity {
                         }
                     }
                 } else {
-                    ToastUtil.showToastShort(InstallRecordDetailActivity.this, "获取维修人员失败");
+                    ToastUtil.showToastShort(InstallRecordDetailActivity.this, "获取安装人员失败");
                 }
             }
 
             @Override
             public void onFail(String msg) {
-                ToastUtil.showToastShort(InstallRecordDetailActivity.this, "获取维修人员失败");
+                ToastUtil.showToastShort(InstallRecordDetailActivity.this, "获取安装人员失败");
             }
         }, PeopleBean.class);
     }
@@ -689,13 +697,13 @@ public class InstallRecordDetailActivity extends BaseActivity {
                         }
                     }
                 } else {
-                    ToastUtil.showToastShort(InstallRecordDetailActivity.this, "获取维修项目失败");
+                    ToastUtil.showToastShort(InstallRecordDetailActivity.this, "获取安装项目失败");
                 }
             }
 
             @Override
             public void onFail(String msg) {
-                ToastUtil.showToastShort(InstallRecordDetailActivity.this, "获取维修项目失败");
+                ToastUtil.showToastShort(InstallRecordDetailActivity.this, "获取安装项目失败");
             }
         }, ProjectBean.class);
     }
