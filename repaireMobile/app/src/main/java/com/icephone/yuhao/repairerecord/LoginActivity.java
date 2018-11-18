@@ -142,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFail(String msg) {
-
+                    ToastUtil.showToastShort(LoginActivity.this,"登录失败，请检查网络重试");
                 }
             }, LoginBean.class);
 

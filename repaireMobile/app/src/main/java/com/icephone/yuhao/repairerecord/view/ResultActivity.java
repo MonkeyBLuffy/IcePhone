@@ -2,6 +2,7 @@ package com.icephone.yuhao.repairerecord.view;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.icephone.yuhao.repairerecord.R;
+import com.icephone.yuhao.repairerecord.Util.OutputEXLUtil;
 import com.icephone.yuhao.repairerecord.Util.StringConstant;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
 import com.icephone.yuhao.repairerecord.adapter.AdapterFacory;
@@ -23,6 +25,7 @@ import com.icephone.yuhao.repairerecord.net.CallBack;
 import com.icephone.yuhao.repairerecord.net.URLConstant;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +37,8 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class ResultActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
 
     private final int READ_WRITE_MEMORY = 0;
+
+    final String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "RecordList";
 
     @BindView(R.id.rv_record_list)
     RecyclerView rvRecordList;
@@ -95,8 +100,8 @@ public class ResultActivity extends BaseActivity implements EasyPermissions.Perm
         //判断有没有权限读写权限
         if (EasyPermissions.hasPermissions(this, perms)) {
             // 如果有权限了
-            //TODO 打开相册
-            Log.i("permission", "打开相册");
+            //TODO 进行导入
+            Log.i("permission", "打开权限");
             outputFile();
         } else {
             // 如果没有权限, 就去申请权限
@@ -104,19 +109,28 @@ public class ResultActivity extends BaseActivity implements EasyPermissions.Perm
             // Dialog显示的正文
             // RC_CAMERA_AND_RECORD_AUDIO 请求码, 用于回调的时候判断是哪次申请
             // perms 就是你要申请的权限
-            EasyPermissions.requestPermissions(this, "需要读取相册", READ_WRITE_MEMORY, perms);
+            EasyPermissions.requestPermissions(this, "需要写入文件权限", READ_WRITE_MEMORY, perms);
         }
     }
 
     private void outputFile() {
+
+        File file = new File(path);
+        //文件夹是否已经存在
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        String fileName = file.toString() + "/" + "维修记录.xls";
         KProgressHUD dialog = KProgressHUD.create(ResultActivity.this)
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
                 .setDetailsLabel("正在导出文件")
                 .setCancellable(true)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f);
-        dialog.show();
         String[] title = {"时间", "联社名称", "网点全称", "网点人员", "维修人员","维修项目","更换设备明细","维修详细","是否返厂维修","维修费","返厂返回时间"};
+        OutputEXLUtil.initExcel(fileName, title);
+        OutputEXLUtil.writeRepairListToExcel(recordBeanList, fileName, ResultActivity.this,dialog);
     }
 
     //查询列表
@@ -152,9 +166,14 @@ public class ResultActivity extends BaseActivity implements EasyPermissions.Perm
         }, RepairRecordBean.class);
     }
 
+    /**
+     * 同意写文件权限
+     * @param requestCode
+     * @param perms
+     */
     @Override
     public void onPermissionsGranted(int requestCode, List<String> perms) {
-
+        outputFile();
     }
 
     @Override

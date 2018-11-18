@@ -12,6 +12,7 @@ import com.icephone.yuhao.repairerecord.Util.DialogUtil;
 import com.icephone.yuhao.repairerecord.Util.StringConstant;
 import com.icephone.yuhao.repairerecord.Util.TimeUtil;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
+import com.icephone.yuhao.repairerecord.Util.UserInfoUtil;
 import com.icephone.yuhao.repairerecord.bean.CenterBean;
 import com.icephone.yuhao.repairerecord.net.ApiBuilder;
 import com.icephone.yuhao.repairerecord.net.ApiClient;
@@ -35,25 +36,35 @@ public class SearchInstallActivity extends BaseActivity {
 
     private String[] centerItem; //联社列表
 
+    //选择联社，如果是联社管理员提示，只能查看所管理的联社
     @OnClick(R.id.rl_center_name)
     void chooseCenterName() {
-        DialogUtil.showSingleChooseDialog(this, "选择联社", centerItem,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                },
-                new DialogInterface.OnClickListener() {
+        if (centerItem == null) {
+            getCenterList();
+        } else {
+            if (UserInfoUtil.isCenterManager(getApplicationContext())) {
+                ToastUtil.showToastShort(SearchInstallActivity.this, "只能选择查看自己管理的联社");
+            } else {
+                DialogUtil.showSingleChooseDialog(this, "选择联社", centerItem,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        },
+                        new DialogInterface.OnClickListener() {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        tvCenterName.setText(centerItem[which]);
-                        centerName = centerItem[which];
-                    }
-                }
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                tvCenterName.setText(centerItem[which]);
+                                centerName = centerItem[which];
+                            }
+                        }
 
-        );
+                );
+            }
+        }
+
     }
 
     @OnClick(R.id.rl_start_time)
@@ -85,7 +96,7 @@ public class SearchInstallActivity extends BaseActivity {
     @OnClick(R.id.bt_search)
     void searchRecord() {
         Bundle bundle = new Bundle();
-        bundle.putString(StringConstant.KEY_SEARCH_CENTER_NAME,centerName);
+        bundle.putString(StringConstant.KEY_SEARCH_CENTER_NAME, centerName);
         bundle.putString(StringConstant.KEY_SEARCH_START_TIME, startTime);
         bundle.putString(StringConstant.KEY_SEARCH_END_TIME, endTime);
         openActivity(ResultInstallActivity.class, bundle);
@@ -113,7 +124,10 @@ public class SearchInstallActivity extends BaseActivity {
 
     @Override
     public void initView() {
-
+        if (UserInfoUtil.isCenterManager(getApplicationContext())) {
+            centerName = UserInfoUtil.getManageCenter(getApplicationContext());
+            tvCenterName.setText(centerName);
+        }
     }
 
     @Override
@@ -131,7 +145,7 @@ public class SearchInstallActivity extends BaseActivity {
                 if (data.getCode() == URLConstant.SUCCUSS_CODE) {
                     if (data.getData() != null) {
                         centerItem = new String[data.getData().size()];
-                        for (int i=0;i< data.getData().size();i++){
+                        for (int i = 0; i < data.getData().size(); i++) {
                             centerItem[i] = data.getData().get(i).getCenter_name();
                         }
                     }

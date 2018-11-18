@@ -12,6 +12,7 @@ import com.icephone.yuhao.repairerecord.Util.DialogUtil;
 import com.icephone.yuhao.repairerecord.Util.StringConstant;
 import com.icephone.yuhao.repairerecord.Util.TimeUtil;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
+import com.icephone.yuhao.repairerecord.Util.UserInfoUtil;
 import com.icephone.yuhao.repairerecord.bean.CenterBean;
 import com.icephone.yuhao.repairerecord.bean.SiteBean;
 import com.icephone.yuhao.repairerecord.net.ApiBuilder;
@@ -38,26 +39,30 @@ public class SearchRecordActivity extends BaseActivity {
 
     @OnClick(R.id.rl_center_name)
     void chooseCenterName() {
-        if (centerItem.length==0) {
+        if (centerItem == null) {
             getCenterList();
         }else{
-            DialogUtil.showSingleChooseDialog(this, "选择联社", centerItem,
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    },
-                    new DialogInterface.OnClickListener() {
+            if (UserInfoUtil.isCenterManager(getApplicationContext())) {
+                ToastUtil.showToastShort(SearchRecordActivity.this, "只能选择查看自己管理的联社");
+            }else{
+                DialogUtil.showSingleChooseDialog(this, "选择联社", centerItem,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        },
+                        new DialogInterface.OnClickListener() {
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            tvCenterName.setText(centerItem[which]);
-                            centerName = centerItem[which];
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                tvCenterName.setText(centerItem[which]);
+                                centerName = centerItem[which];
+                            }
                         }
-                    }
 
-            );
+                );
+            }
         }
     }
 
@@ -118,7 +123,10 @@ public class SearchRecordActivity extends BaseActivity {
 
     @Override
     public void initView() {
-
+        if (UserInfoUtil.isCenterManager(getApplicationContext())) {
+            centerName = UserInfoUtil.getManageCenter(getApplicationContext());
+            tvCenterName.setText(centerName);
+        }
     }
 
     @Override

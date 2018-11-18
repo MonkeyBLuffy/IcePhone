@@ -109,6 +109,7 @@ public class OutputEXLUtil {
     public static void writeRepairListToExcel(List<RepairRecordBean.DataBean> objList, String fileName, Context c, KProgressHUD dialog) {
 
         if (objList != null && objList.size() > 0) {
+            dialog.show();
             WritableWorkbook writebook = null;
             InputStream in = null;
             try {
@@ -153,6 +154,8 @@ public class OutputEXLUtil {
                 dialog.dismiss();
             } catch (Exception e) {
                 e.printStackTrace();
+                dialog.dismiss();
+                ToastUtil.showToastShort(c, "导出失败");
             } finally {
                 if (writebook != null) {
                     try {
@@ -171,6 +174,8 @@ public class OutputEXLUtil {
                 }
             }
 
+        } else {
+            ToastUtil.showToastShort(c,"数据为空，导出失败");
         }
     }
 
@@ -240,6 +245,8 @@ public class OutputEXLUtil {
                 }
             }
 
+        }else{
+            ToastUtil.showToastShort(c,"数据为空，导出失败");
         }
     }
 }

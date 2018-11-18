@@ -14,6 +14,7 @@ import com.icephone.yuhao.repairerecord.R;
 import com.icephone.yuhao.repairerecord.Util.DialogUtil;
 import com.icephone.yuhao.repairerecord.Util.StringConstant;
 import com.icephone.yuhao.repairerecord.Util.ToastUtil;
+import com.icephone.yuhao.repairerecord.Util.UserInfoUtil;
 import com.icephone.yuhao.repairerecord.adapter.AdapterFacory;
 import com.icephone.yuhao.repairerecord.adapter.PeopleAdapter;
 import com.icephone.yuhao.repairerecord.bean.CenterBean;
@@ -101,7 +102,8 @@ public class ManagePeopleActivity extends BaseActivity {
 
     //获取List
     private void refreshList() {
-        ApiBuilder builder = new ApiBuilder().Url(URLConstant.PERSON_GET_LIST);
+        ApiBuilder builder = new ApiBuilder().Url(URLConstant.PERSON_GET_LIST)
+                .Params("limit", StringConstant.NULL_STRING);
         ApiClient.getInstance().doGet(builder, new CallBack<PeopleBean>() {
             @Override
             public void onResponse(PeopleBean data) {

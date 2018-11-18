@@ -33,7 +33,7 @@ public class UserInfoUtil {
         return (String) SharedPerferenceUtils.getParam(context, KEY_USER_ACCOUNT, "");
     }
 
-    public static String getKeyManageCenter(Context context) {
+    public static String getManageCenter(Context context) {
         return (String) SharedPerferenceUtils.getParam(context, KEY_MANAGE_CENTER, "");
     }
 
