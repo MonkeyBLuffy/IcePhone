@@ -130,7 +130,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initView() {
-
+        ToastUtil.showToastShort(this,"欢迎使用");
     }
 
     @Override

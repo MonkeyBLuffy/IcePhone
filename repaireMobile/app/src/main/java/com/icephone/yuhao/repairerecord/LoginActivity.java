@@ -130,11 +130,10 @@ public class LoginActivity extends AppCompatActivity {
             ApiClient.getInstance().doGet(builder, new CallBack<LoginBean>() {
                 @Override
                 public void onResponse(LoginBean data) {
+                    showProgress(false);
                     if (data.getCode()==URLConstant.SUCCUSS_CODE){
-                        ToastUtil.showToastShort(LoginActivity.this,"欢迎使用");
                         UserInfoUtil.saveUserInfo(getApplicationContext(), data.getData());
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        showProgress(false);
                         finish();
                     }else {
                         ToastUtil.showToastShort(LoginActivity.this,data.getMsg());

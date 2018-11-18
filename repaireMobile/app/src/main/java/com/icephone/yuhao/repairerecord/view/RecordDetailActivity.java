@@ -6,6 +6,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -108,7 +109,7 @@ public class RecordDetailActivity extends BaseActivity {
     @BindView(R.id.et_cost) //花费（管理员填写）
             EditText costView;
     @BindView(R.id.tv_repair_warranty)
-            TextView warrantyView;
+    TextView warrantyView;
 
     //需要选择的一些选项
     @BindView(R.id.ll_time) //维修时间
@@ -126,7 +127,7 @@ public class RecordDetailActivity extends BaseActivity {
     @BindView(R.id.rl_device) //选择设备
             RelativeLayout rlDevice;
     @BindView(R.id.rl_repair_warranty)
-            RelativeLayout rlRepairWarranty;
+    RelativeLayout rlRepairWarranty;
 
     @OnClick(R.id.ll_time)
     void showTimeDialog() {
@@ -269,7 +270,7 @@ public class RecordDetailActivity extends BaseActivity {
 
     //是否在保修期内
     @OnClick(R.id.rl_repair_warranty)
-    void chooseIsWarranty(){
+    void chooseIsWarranty() {
         final String[] item = {"是", "否"};
         DialogUtil.showSingleChooseDialog(this, "选择是否在保修期内", item,
                 new DialogInterface.OnClickListener() {
@@ -292,7 +293,7 @@ public class RecordDetailActivity extends BaseActivity {
     @OnClick(R.id.rl_device)
     void chooseDevice() {
         // 设备——多选
-        DialogUtil.showMultiChooseDialog(this, "选择设备", deviceItem, deviceItemIsChecked,
+        DialogUtil.showMultiChooseDialog(RecordDetailActivity.this, "选择设备", deviceItem, deviceItemIsChecked,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -305,12 +306,32 @@ public class RecordDetailActivity extends BaseActivity {
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                         deviceItemIsChecked[which] = isChecked;
                         if (isChecked) {
-                            chooseDeviceResult.add(deviceItem[which]);
+                            inputDeviceNum(which);
                         } else {
-                            chooseDeviceResult.remove(deviceItem[which]);
+                            chooseDeviceResult.remove(deviceItem[which] + deviceNum[which]);
                         }
                     }
                 });
+    }
+
+    //选择个数
+    private void inputDeviceNum(final int position) {
+        View view = View.inflate(RecordDetailActivity.this, R.layout.layout_dialog_edit, null);
+        final EditText editText = view.findViewById(R.id.et_add);
+        DialogUtil.showEditTextDialog(this, "请填写数量", view, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deviceNum[position] = editText.getText().toString();
+                if (deviceNum[position].equals("")) {
+                    ToastUtil.showToastShort(RecordDetailActivity.this, "请正确填写");
+                    deviceItemIsChecked[position] = false;
+                } else {
+                    deviceItemIsChecked[position] = true;
+                    chooseDeviceResult.add(deviceItem[position] + deviceNum[position]);
+                    dialog.dismiss();
+                }
+            }
+        }, null);
     }
 
     @OnClick(R.id.iv_delete)
@@ -443,7 +464,7 @@ public class RecordDetailActivity extends BaseActivity {
             ToastUtil.showToastShort(this, "请选择网点名称");
             return false;
         }
-        site_person = sitePersonView.getText() == null ? "" : sitePersonView.getText().toString();
+        site_person = sitePersonView.getText().toString();
         if (site_person.equals("")) {
             ToastUtil.showToastShort(this, "请填写网点人员");
             return false;
@@ -464,7 +485,7 @@ public class RecordDetailActivity extends BaseActivity {
             ToastUtil.showToastShort(this, "请选择设备明细");
             return false;
         }
-        fix_state = fixStateView.getText() == null ? "" : fixStateView.getText().toString();
+        fix_state = fixStateView.getText().toString();
         if (fix_state.equals("")) {
             ToastUtil.showToastShort(this, "请填写维修详情");
             return false;
@@ -473,7 +494,7 @@ public class RecordDetailActivity extends BaseActivity {
             ToastUtil.showToastShort(this, "请选择是否返厂维修");
             return false;
         }
-        fix_cost = costView.getText() == null ? 0 : Integer.valueOf(costView.getText().toString());
+        fix_cost = costView.getText().toString().equals("") ? 0 : Integer.valueOf(costView.getText().toString());
         return true;
     }
 
@@ -661,8 +682,9 @@ public class RecordDetailActivity extends BaseActivity {
     /**
      * 获取设备列表
      */
-    private String[] deviceItem;
-    private boolean[] deviceItemIsChecked;
+    private String[] deviceItem;//设备列表
+    private boolean[] deviceItemIsChecked;//设备是否被选中
+    private String[] deviceNum;
     final List<String> chooseDeviceResult = new ArrayList<>();
 
     private void getDeviceList() {
@@ -674,9 +696,11 @@ public class RecordDetailActivity extends BaseActivity {
                     if (data.getData() != null) {
                         deviceItem = new String[data.getData().size()];
                         deviceItemIsChecked = new boolean[data.getData().size()];
+                        deviceNum = new String[data.getData().size()];
                         for (int i = 0; i < data.getData().size(); i++) {
                             deviceItem[i] = data.getData().get(i).getDevice_name();
                             deviceItemIsChecked[i] = false;
+                            deviceNum[i] = "";
                         }
                     }
                 } else {

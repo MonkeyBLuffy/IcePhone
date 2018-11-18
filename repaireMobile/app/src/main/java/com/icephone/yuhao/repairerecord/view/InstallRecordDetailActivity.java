@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -254,7 +255,7 @@ public class InstallRecordDetailActivity extends BaseActivity {
     @OnClick(R.id.rl_install_device)
     void chooseDevice() {
         // 设备——多选
-        DialogUtil.showMultiChooseDialog(this, "选择设备", deviceItem, deviceItemIsChecked,
+        DialogUtil.showMultiChooseDialog(InstallRecordDetailActivity.this, "选择设备", deviceItem, deviceItemIsChecked,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -267,12 +268,32 @@ public class InstallRecordDetailActivity extends BaseActivity {
                     public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                         deviceItemIsChecked[which] = isChecked;
                         if (isChecked) {
-                            chooseDeviceResult.add(deviceItem[which]);
+                            inputDeviceNum(which);
                         } else {
-                            chooseDeviceResult.remove(deviceItem[which]);
+                            chooseDeviceResult.remove(deviceItem[which] + deviceNum[which]);
                         }
                     }
                 });
+    }
+
+    //选择个数
+    private void inputDeviceNum(final int position) {
+        View view = View.inflate(InstallRecordDetailActivity.this, R.layout.layout_dialog_edit, null);
+        final EditText editText = view.findViewById(R.id.et_add);
+        DialogUtil.showEditTextDialog(this, "请填写数量", view, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deviceNum[position] = editText.getText().toString();
+                if (deviceNum[position].equals("")) {
+                    ToastUtil.showToastShort(InstallRecordDetailActivity.this, "请正确填写");
+                    deviceItemIsChecked[position] = false;
+                } else {
+                    deviceItemIsChecked[position] = true;
+                    chooseDeviceResult.add(deviceItem[position] + deviceNum[position]);
+                    dialog.dismiss();
+                }
+            }
+        }, null);
     }
 
     @OnClick(R.id.iv_delete)
@@ -403,7 +424,7 @@ public class InstallRecordDetailActivity extends BaseActivity {
             ToastUtil.showToastShort(this, "请选择网点名称");
             return false;
         }
-        site_person = sitePersonView.getText() == null ? "" : sitePersonView.getText().toString();
+        site_person = sitePersonView.getText().toString();
         if (site_person.equals("")) {
             ToastUtil.showToastShort(this, "请填写网点人员");
             return false;
@@ -420,7 +441,7 @@ public class InstallRecordDetailActivity extends BaseActivity {
             ToastUtil.showToastShort(this, "请选择设备明细");
             return false;
         }
-        install_state = installStateView.getText() == null ? "" : installStateView.getText().toString();
+        install_state = installStateView.getText().toString();
         if (install_state.equals("")) {
             ToastUtil.showToastShort(this, "请填写安装详情");
             return false;
@@ -429,7 +450,7 @@ public class InstallRecordDetailActivity extends BaseActivity {
             ToastUtil.showToastShort(this, "请选择是否完工");
             return false;
         }
-        install_cost = costView.getText() == null ? 0 : Integer.valueOf(costView.getText().toString());
+        install_cost = costView.getText().toString().equals("") ? 0 : Integer.valueOf(costView.getText().toString());
 
         return true;
     }
@@ -609,6 +630,7 @@ public class InstallRecordDetailActivity extends BaseActivity {
      */
     private String[] deviceItem;
     private boolean[] deviceItemIsChecked;
+    private String[] deviceNum; //单位
     final List<String> chooseDeviceResult = new ArrayList<>();
 
     private void getDeviceList() {
@@ -620,9 +642,11 @@ public class InstallRecordDetailActivity extends BaseActivity {
                     if (data.getData() != null) {
                         deviceItem = new String[data.getData().size()];
                         deviceItemIsChecked = new boolean[data.getData().size()];
+                        deviceNum = new String[data.getData().size()];
                         for (int i = 0; i < data.getData().size(); i++) {
                             deviceItem[i] = data.getData().get(i).getDevice_name();
                             deviceItemIsChecked[i] = false;
+                            deviceNum[i] = "";
                         }
                     }
                 } else {
