@@ -496,7 +496,7 @@ public class InstallRecordDetailActivity extends BaseActivity {
         installStateView.setText(install_state);
 
         install_cost = bean.getInstall_cost();
-        costView.setText(install_cost);
+        costView.setText(String.valueOf(install_cost));
 
         install_complete = bean.getInstall_complete();
         returnFixView.setText(install_complete);

@@ -40,7 +40,7 @@ public class ResultInstallActivity extends BaseActivity implements EasyPermissio
 
     private final int READ_WRITE_MEMORY = 0;
 
-    final String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "RecordList";
+    final String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "固弘安防";
 
     @BindView(R.id.rv_record_list)
     RecyclerView rvRecordList;
