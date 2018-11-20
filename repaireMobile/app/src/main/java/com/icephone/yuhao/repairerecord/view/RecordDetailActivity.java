@@ -495,6 +495,7 @@ public class RecordDetailActivity extends BaseActivity {
             return false;
         }
         fix_cost = costView.getText().toString().equals("") ? 0 : Integer.valueOf(costView.getText().toString());
+        return_time = returnTimeView.getText().toString().equals("") ? "未填写" : returnTimeView.getText().toString();
         return true;
     }
 
